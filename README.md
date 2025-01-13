@@ -1,6 +1,6 @@
-# Marriage Plugin
+# Seb's System Plugin
 
-A customizable marriage plugin for Minecraft servers built using Spigot/Bukkit API. This plugin allows players to propose marriage, accept/deny proposals, teleport to their spouse, and view the list of all married couples on the server.
+A customizable plugin for Minecraft servers built using Spigot/Bukkit API. This plugin allows players to marry, sethomes, warp and tpa.
 
 ## Features
 
