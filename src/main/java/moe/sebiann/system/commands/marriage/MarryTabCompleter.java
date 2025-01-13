@@ -27,7 +27,7 @@ public class MarryTabCompleter implements TabCompleter {
 
         if (args.length == 1) {
             // Suggest main subcommands
-            suggestions = new ArrayList<>(Arrays.asList("propose", "accept", "deny", "list", "kiss", "divorce", "tp"));
+            suggestions = new ArrayList<>(Arrays.asList("propose", "accept", "deny", "list", "kiss", "divorce", "tp", "adopt", "children"));
         } else if (args.length == 2 && args[0].equalsIgnoreCase("propose")) {
             // Suggest online players for /marry propose
             for (Player onlinePlayer : player.getServer().getOnlinePlayers()) {
@@ -35,8 +35,18 @@ public class MarryTabCompleter implements TabCompleter {
                     suggestions.add(onlinePlayer.getName());
                 }
             }
+            suggestions.add("accept");
+            suggestions.add("deny");
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("adopt")) {
+            // Suggest online players for /marry propose
+            for (Player onlinePlayer : player.getServer().getOnlinePlayers()) {
+                if (!onlinePlayer.equals(player)) {
+                    suggestions.add(onlinePlayer.getName());
+                }
+            }
+            suggestions.add("accept");
+            suggestions.add("deny");
         }
-
         // Filter suggestions based on the partial input
         String partialInput = args[args.length - 1].toLowerCase();
         suggestions.removeIf(suggestion -> !suggestion.toLowerCase().startsWith(partialInput));

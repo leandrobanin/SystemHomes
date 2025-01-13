@@ -17,6 +17,7 @@ public class MarriageManager {
     private final Gson gson;
     private List<Marriage> marriages;
     private final Map<UUID, UUID> proposals = new HashMap<>();
+    private final Map<UUID, UUID> adoptionRequests = new HashMap<>(); // Key: Child, Value: Parent
 
     public MarriageManager(File dataFolder) {
         this.marriagesFile = new File(dataFolder, "marriages.json");
@@ -25,7 +26,25 @@ public class MarriageManager {
 
         loadMarriages();
     }
+    // Add an adoption request
+    public void addAdoptionRequest(UUID parent, UUID child) {
+        adoptionRequests.put(child, parent);
+    }
 
+    // Get the parent for a pending adoption
+    public UUID getAdoptionRequester(UUID child) {
+        return adoptionRequests.get(child);
+    }
+
+    // Remove an adoption request
+    public void removeAdoptionRequest(UUID child) {
+        adoptionRequests.remove(child);
+    }
+
+    // Check if a child has a pending adoption request
+    public boolean hasAdoptionRequest(UUID child) {
+        return adoptionRequests.containsKey(child);
+    }
     // Proposal Management
     public void addProposal(UUID proposer, UUID proposed) {
         proposals.put(proposed, proposer);
@@ -80,7 +99,7 @@ public class MarriageManager {
         }
     }
 
-    private void saveMarriages() {
+    public void saveMarriages() {
         try (FileWriter writer = new FileWriter(marriagesFile)) {
             gson.toJson(marriages, writer);
         } catch (IOException e) {
@@ -96,4 +115,14 @@ public class MarriageManager {
                 .findFirst()
                 .orElse(null);
     }
+    public Marriage getMarriage(UUID player1, UUID player2) {
+        for (Marriage marriage : marriages) {
+            if ((marriage.getP().equals(player1.toString()) && marriage.getP2().equals(player2.toString())) ||
+                    (marriage.getP().equals(player2.toString()) && marriage.getP2().equals(player1.toString()))) {
+                return marriage;
+            }
+        }
+        return null;
+    }
+
 }

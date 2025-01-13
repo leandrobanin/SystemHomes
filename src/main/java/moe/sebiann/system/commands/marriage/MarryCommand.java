@@ -33,7 +33,7 @@ public class MarryCommand implements CommandExecutor {
         }
 
         if (args.length < 1) {
-            player.sendMessage("§cUsage: /marry <propose|list|kiss>");
+            player.sendMessage("§cUsage: /marry <propose|list|kiss|divorce|tp|adopt>");
             return true;
         }
 
@@ -53,8 +53,18 @@ public class MarryCommand implements CommandExecutor {
             case "tp":
                 handleTpSubcommand(player);
                 break;
+            case "adopt":
+                if (args.length > 1 && (args[1].equalsIgnoreCase("accept") || args[1].equalsIgnoreCase("deny"))) {
+                    handleAdoptResponseSubcommand(player, args);
+                } else {
+                    handleAdoptSubcommand(player, args);
+                }
+                break;
+            case "children":
+                handleChildrenSubcommand(player);
+                break;
             default:
-                player.sendMessage("§cUnknown subcommand. Use /marry <propose|list|kiss>");
+                player.sendMessage("§cUnknown subcommand. Use /marry <propose|list|kiss|divorce|tp|adopt>");
                 break;
         }
 
@@ -199,7 +209,18 @@ public class MarryCommand implements CommandExecutor {
             String formattedDays = decimalFormat.format(daysMarried);
 
             player.sendMessage(" - §e" + player1Name + " §7and§e " + player2Name);
-            player.sendMessage("§7(married for §b" + formattedDays + " days§7)");
+            player.sendMessage("   §7(married for §b" + formattedDays + " days§7)");
+
+            // List children
+            List<String> children = marriage.getChildren();
+            if (children != null && !children.isEmpty()) {
+                player.sendMessage("   §7Children:");
+                for (String childUuid : children) {
+                    String childName = getPlayerName(UUID.fromString(childUuid));
+                    player.sendMessage("     - §e" + childName);
+                }
+            }
+
         }
     }
     private String getPlayerName(UUID uuid) {
@@ -258,5 +279,115 @@ public class MarryCommand implements CommandExecutor {
             player.sendMessage("§aYou have been teleported to " + spouse.getName() + "!");
             spouse.sendMessage("§a" + player.getName() + " has teleported to you!");
         }, delayInTicks);
+    }
+    private void handleAdoptSubcommand(Player player, String[] args) {
+        if (args.length < 2) {
+            player.sendMessage("§cUsage: /marry adopt <player>");
+            return;
+        }
+
+        UUID spouseUuid = marriageManager.getSpouse(player.getUniqueId());
+        if (spouseUuid == null) {
+            player.sendMessage("§cYou are not married!");
+            return;
+        }
+
+        Player child = Bukkit.getPlayer(args[1]);
+        if (child == null || !child.isOnline()) {
+            player.sendMessage("§cPlayer not found or not online!");
+            return;
+        }
+
+        if (child.getUniqueId().equals(player.getUniqueId()) || child.getUniqueId().equals(spouseUuid)) {
+            player.sendMessage("§cYou cannot adopt yourself or your spouse!");
+            return;
+        }
+        if (marriageManager.hasAdoptionRequest(child.getUniqueId())) {
+            player.sendMessage("§cThis player already has a pending adoption request!");
+            return;
+        }
+
+        // Check if the player is already adopted
+        for (Marriage marriage : marriageManager.getAllMarriages()) {
+            if (marriage.getChildren() != null && marriage.getChildren().contains(child.getUniqueId().toString())) {
+                player.sendMessage("§cThis player is already adopted by another family!");
+                return;
+            }
+        }
+
+        // Send adoption request
+        marriageManager.addAdoptionRequest(player.getUniqueId(), child.getUniqueId());
+        player.sendMessage("§aYou have sent an adoption request to " + child.getName() + "!");
+        child.sendMessage("§e" + player.getName() + " and their spouse want to adopt you! Use /marry adopt accept or /marry adopt deny.");
+    }
+    private void handleAdoptResponseSubcommand(Player child, String[] args) {
+        if (!marriageManager.hasAdoptionRequest(child.getUniqueId())) {
+            child.sendMessage("§cYou have no adoption requests!");
+            System.out.println("No adoption request found for: " + child.getUniqueId());
+            return;
+        }
+
+        UUID parentUuid = marriageManager.getAdoptionRequester(child.getUniqueId());
+        Player parent = Bukkit.getPlayer(parentUuid);
+
+        if (args.length < 2 || (!args[1].equalsIgnoreCase("accept") && !args[1].equalsIgnoreCase("deny"))) {
+            child.sendMessage("§cUsage: /marry adopt <accept|deny>");
+            return;
+        }
+
+        if (args[1].equalsIgnoreCase("accept")) {
+            if (parent == null || !parent.isOnline()) {
+                child.sendMessage("§cThe parent who sent the request is no longer online!");
+                marriageManager.removeAdoptionRequest(child.getUniqueId());
+                return;
+            }
+
+            UUID spouseUuid = marriageManager.getSpouse(parentUuid);
+            if (spouseUuid == null) {
+                child.sendMessage("§cThe parent who sent the request is no longer married!");
+                marriageManager.removeAdoptionRequest(child.getUniqueId());
+                return;
+            }
+
+            Marriage marriage = marriageManager.getMarriage(parentUuid, spouseUuid);
+            if (marriage != null) {
+                marriage.addChild(child.getUniqueId().toString());
+                marriageManager.removeAdoptionRequest(child.getUniqueId());
+                marriageManager.saveMarriages();
+
+                parent.sendMessage("§a" + child.getName() + " has accepted your adoption request!");
+                Bukkit.getPlayer(spouseUuid).sendMessage("§a" + child.getName() + " has joined your family!");
+                child.sendMessage("§aYou have been adopted by " + parent.getName() + " and " + Bukkit.getPlayer(spouseUuid).getName() + "!");
+            } else {
+                child.sendMessage("§cAdoption failed because the marriage could not be found.");
+                System.out.println("Marriage not found for: Parent=" + parentUuid + ", Spouse=" + spouseUuid);
+            }
+        } else if (args[1].equalsIgnoreCase("deny")) {
+            if (parent != null && parent.isOnline()) {
+                parent.sendMessage("§c" + child.getName() + " has denied your adoption request.");
+            }
+            child.sendMessage("§aYou have denied the adoption request.");
+            marriageManager.removeAdoptionRequest(child.getUniqueId());
+        }
+    }
+
+    private void handleChildrenSubcommand(Player player) {
+        UUID spouseUuid = marriageManager.getSpouse(player.getUniqueId());
+        if (spouseUuid == null) {
+            player.sendMessage("§cYou are not married!");
+            return;
+        }
+
+        Marriage marriage = marriageManager.getMarriage(player.getUniqueId(), spouseUuid);
+        if (marriage == null || marriage.getChildren() == null || marriage.getChildren().isEmpty()) {
+            player.sendMessage("§cYou and your spouse have no adopted children.");
+            return;
+        }
+
+        player.sendMessage("§aYour adopted children:");
+        for (String childUuid : marriage.getChildren()) {
+            String childName = getPlayerName(UUID.fromString(childUuid));
+            player.sendMessage(" - §e" + childName);
+        }
     }
 }

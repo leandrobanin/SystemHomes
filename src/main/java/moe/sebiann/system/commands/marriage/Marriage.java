@@ -1,5 +1,6 @@
 package moe.sebiann.system.commands.marriage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Marriage {
@@ -21,7 +22,18 @@ public class Marriage {
 
     public List<String> getChildren() { return children; }
     public void setChildren(List<String> children) { this.children = children; }
+    public void addChild(String childUuid) {
+        if (children == null) {
+            children = new ArrayList<>();
+        }
+        children.add(childUuid);
+    }
 
+    public void removeChild(String childUuid) {
+        if (children != null) {
+            children.remove(childUuid);
+        }
+    }
     public long getMarriedSince() { return marriedSince; }
     public void setMarriedSince(long marriedSince) { this.marriedSince = marriedSince; }
 }

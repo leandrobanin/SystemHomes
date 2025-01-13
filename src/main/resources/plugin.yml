@@ -69,5 +69,6 @@ commands:
     permission: csystem.spawn
   marry:
     description: "Manage marriage"
-    usage: "/marry <propose|list>"
+    usage: "/marry <propose|list|kiss|divorce|tp|adopt>"
+    permission: csystem.marry
 depend: [Vault] # Vault is essential for handling permissions and economy. Ensure it is mentioned in the plugin documentation.
