@@ -1,0 +1,10 @@
+messages:
+  welcome: "Welcome back, {player}!"
+home:
+  teleport_delay: 2
+warp:
+  teleport_delay: 2
+tpa:
+  teleport_delay: 2
+marry:
+  teleport_delay: 2

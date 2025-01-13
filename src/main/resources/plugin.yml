@@ -1,0 +1,73 @@
+name: system
+version: ${version}
+main: moe.sebiann.system.System
+api-version: '1.21.4'
+load: POSTWORLD
+authors: [ Sebastian, Beauver ]
+website: sebiann.moe
+prefix: CloudieSystem
+#libraries:
+#  - com.google.guava:guava:30.1.1-jre # Verify if all functionality provided by Guava is being used; consider removal if not necessary.
+#  - com.google.code.gson:gson:2.8.6 # Ensure this library is required for JSON processing; remove if unused.
+permissions :
+  csystem.marry:
+    description: "marry permission"
+    children:
+      csystem.marry.tp:
+commands:
+  sethome:
+    description: "Set home"
+    usage: "/sethome <name>"
+    permission: csystem.home
+  home:
+    description: "Teleport home"
+    usage: "/home <name>"
+    permission: csystem.home
+  homes:
+    description: "List all homes"
+    usage: "/homes"
+    permission: csystem.home
+  delhome:
+    description: "delete a home"
+    usage: "/delhome <name>"
+    permission: csystem.home
+  setwarp:
+    description: "Sets a warp at your location."
+    usage: "/setwarp <name>"
+    permission: csystem.warp.admin
+  warp:
+    description: "Teleports you to a warp."
+    usage: "/warp <name>"
+    permission: csystem.warp
+  delwarp:
+    description: "Deletes a specific warp."
+    usage: "/delwarp <name>"
+    permission: csystem.warp.admin
+  warps:
+    description: "Lists all available warps."
+    usage: "/warps"
+    permission: csystem.warp
+  tpa:
+    description: "Request to teleport to another player."
+    usage: "/tpa <player>"
+    permission: csystem.tpa
+  tpahere:
+    description: "Request a player to teleport to you."
+    usage: "/tpahere <player>"
+    permission: csystem.tpa
+  tpaccept:
+    description: "Accept a teleport request."
+    usage: "/tpaccept"
+    permission: csystem.tpa
+  tpdeny:
+    description: "Deny a teleport request."
+    usage: "/tpdeny"
+    permission: csystem.tpa
+  spawn:
+    description: "Teleport to the spawn location."
+    usage: "/spawn"
+    permission: csystem.spawn
+  marry:
+    description: "Manage marriage"
+    usage: "/marry <propose|list>"
+depend: [Vault] # Vault is essential for handling permissions and economy. Ensure it is mentioned in the plugin documentation.
