@@ -13,7 +13,7 @@ permissions :
   csystem.marry:
     description: "marry permission"
     children:
-      csystem.marry.tp:
+      csystem.marry.tp: true
 commands:
   sethome:
     description: "Set home"
