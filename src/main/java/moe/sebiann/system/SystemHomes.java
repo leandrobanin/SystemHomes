@@ -3,7 +3,6 @@ package moe.sebiann.system;
 import moe.sebiann.system.commands.home.*;
 import moe.sebiann.system.commands.warp.*;
 import moe.sebiann.system.commands.tpa.*;
-import moe.sebiann.system.commands.marriage.*;
 import moe.sebiann.system.commands.*;
 import moe.sebiann.system.events.PlayerJoinListener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 
-public class System extends JavaPlugin {
+public class SystemHomes extends JavaPlugin {
 
     private File homesFile;
     private File warpsFile;
@@ -25,31 +24,36 @@ public class System extends JavaPlugin {
         createWarpsFile();
 
         TpaManager tpaManager = new TpaManager();
-        MarriageManager marriageManager = new MarriageManager(getDataFolder());
 
-        // Register commands
+        getCommand("systemhomes").setExecutor(new SystemHomesCommand(this));
+
+        // Register home commands
         getCommand("sethome").setExecutor(new SetHomeCommand(homesFile, this));
         getCommand("home").setExecutor(new HomeCommand(homesFile, this));
-        getCommand("homes").setExecutor(new ListHomesCommand(homesFile)); // Register list command
-        getCommand("delhome").setExecutor(new DelHomeCommand(homesFile)); // Register delete command
+        getCommand("homes").setExecutor(new ListHomesCommand(homesFile));
+        getCommand("delhome").setExecutor(new DelHomeCommand(homesFile));
+
+        // Register warp commands
         getCommand("setwarp").setExecutor(new SetWarpCommand(warpsFile));
         getCommand("warp").setExecutor(new WarpCommand(warpsFile, this));
         getCommand("delwarp").setExecutor(new DelWarpCommand(warpsFile));
         getCommand("warps").setExecutor(new ListWarpsCommand(warpsFile));
         getCommand("spawn").setExecutor(new SpawnCommand(warpsFile, this));
+
+        // Register tpa commands
         getCommand("tpa").setExecutor(new TpaCommand(tpaManager));
         getCommand("tpahere").setExecutor(new TpahereCommand(tpaManager));
         getCommand("tpaccept").setExecutor(new TpAcceptCommand(tpaManager, this));
         getCommand("tpdeny").setExecutor(new TpDenyCommand(tpaManager));
-        getCommand("marry").setExecutor(new MarryCommand(marriageManager, this));
 
-        // Register tab completions
+        // Register tab completions for warps and homes and reload
         getCommand("warp").setTabCompleter(new WarpTabCompleter(warpsFile));
         getCommand("delwarp").setTabCompleter(new WarpTabCompleter(warpsFile));
         getCommand("home").setTabCompleter(new HomeTabCompleter(homesFile));
         getCommand("delhome").setTabCompleter(new HomeTabCompleter(homesFile));
-        getCommand("marry").setTabCompleter(new MarryTabCompleter(marriageManager)); // Register the tab completer
-        // Register event listeners
+        getCommand("systemhomes").setTabCompleter(new SystemHomesTabCompleter());
+
+        // Register event listener
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(getConfig()), this);
     }
     private void createHomesFile() {

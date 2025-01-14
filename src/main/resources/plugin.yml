@@ -1,74 +1,84 @@
-name: system
+name: SystemHomes
 version: ${version}
-main: moe.sebiann.system.System
+main: moe.sebiann.system.SystemHomes
 api-version: '1.21.4'
 load: POSTWORLD
 authors: [ Sebastian, Beauver ]
 website: sebiann.moe
-prefix: CloudieSystem
-#libraries:
-#  - com.google.guava:guava:30.1.1-jre # Verify if all functionality provided by Guava is being used; consider removal if not necessary.
-#  - com.google.code.gson:gson:2.8.6 # Ensure this library is required for JSON processing; remove if unused.
+prefix: SystemHomes
 permissions :
-  csystem.marry:
-    description: "marry permission"
+  systemhomes.home:
+    description: "Permission to do homes"
+    default: true
+  systemhomes.warp:
+    description: "Permission to warp"
+    default: true
     children:
-      csystem.marry.tp: true
+      systemhomes.warp.admin: false
+  systemhomes.tpa:
+    description: "Permission to request teleports"
+    default: true
+  systemhomes.spawn:
+    description: "Permission to teleport to spawn"
+    default: true
+  systemhomes.admin.reload:
+    description: "Permission to reload the plugin"
+    default: false
 commands:
+  systemhomes:
+    description: "Reload the plugin configuration."
+    usage: "/systemhomes <reload>"
+    permission: systemhomes.admin.reload
   sethome:
     description: "Set home"
     usage: "/sethome <name>"
-    permission: csystem.home
+    permission: systemhomes.home
   home:
     description: "Teleport home"
     usage: "/home <name>"
-    permission: csystem.home
+    permission: systemhomes.home
   homes:
     description: "List all homes"
     usage: "/homes"
-    permission: csystem.home
+    permission: systemhomes.home
   delhome:
     description: "delete a home"
     usage: "/delhome <name>"
-    permission: csystem.home
+    permission: systemhomes.home
   setwarp:
     description: "Sets a warp at your location."
     usage: "/setwarp <name>"
-    permission: csystem.warp.admin
+    permission: systemhomes.warp.admin
   warp:
     description: "Teleports you to a warp."
     usage: "/warp <name>"
-    permission: csystem.warp
+    permission: systemhomes.warp
   delwarp:
     description: "Deletes a specific warp."
     usage: "/delwarp <name>"
-    permission: csystem.warp.admin
+    permission: systemhomes.warp.admin
   warps:
     description: "Lists all available warps."
     usage: "/warps"
-    permission: csystem.warp
+    permission: systemhomes.warp
   tpa:
     description: "Request to teleport to another player."
     usage: "/tpa <player>"
-    permission: csystem.tpa
+    permission: systemhomes.tpa
   tpahere:
     description: "Request a player to teleport to you."
     usage: "/tpahere <player>"
-    permission: csystem.tpa
+    permission: systemhomes.tpa
   tpaccept:
     description: "Accept a teleport request."
     usage: "/tpaccept"
-    permission: csystem.tpa
+    permission: systemhomes.tpa
   tpdeny:
     description: "Deny a teleport request."
     usage: "/tpdeny"
-    permission: csystem.tpa
+    permission: systemhomes.tpa
   spawn:
     description: "Teleport to the spawn location."
     usage: "/spawn"
-    permission: csystem.spawn
-  marry:
-    description: "Manage marriage"
-    usage: "/marry <propose|list|kiss|divorce|tp|adopt>"
-    permission: csystem.marry
-depend: [Vault] # Vault is essential for handling permissions and economy. Ensure it is mentioned in the plugin documentation.
+    permission: systemhomes.spawn
+depend: [Vault] # Vault is essential for handling permissions and economy.

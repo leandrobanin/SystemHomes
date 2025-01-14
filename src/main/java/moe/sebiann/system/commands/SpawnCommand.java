@@ -14,12 +14,10 @@ import java.io.File;
 
 public class SpawnCommand implements CommandExecutor {
 
-    private final File warpsFile;
     private final FileConfiguration warpsConfig;
     private final JavaPlugin plugin;
 
     public SpawnCommand(File warpsFile, JavaPlugin plugin) {
-        this.warpsFile = warpsFile;
         this.warpsConfig = YamlConfiguration.loadConfiguration(warpsFile);
         this.plugin = plugin;
     }
