@@ -40,28 +40,23 @@ A customizable plugin for Minecraft servers built using Spigot/Bukkit API. This 
 The plugin's settings can be customized in the `config.yml` file. Below is an example configuration:
 
 ```yaml
-messages:
-  welcome: "Welcome back, {player}!"
 home:
   teleport_delay: 2
 warp:
   teleport_delay: 2
 tpa:
   teleport_delay: 2
-marry:
-  teleport_delay: 2
 ```
 
 ## Permissions
 
-| Permission           | Description                             |
-|----------------------|-----------------------------------------|
-| `marry.use`          | Grants access to all `/marry` commands. |
-| `csystem.home`       | Grants access to all home commands.     |
-| `csystem.warp`       | Grants access to /warp and /warps.      |
-| `csystem.warp.admin` | Grants access to /setwarp and /delwarp. |
-| `csystem.tpa`        | Grants access to all TPA commands.      |
-| `csystem.spawn`      | Grants access to /spawn.                |
+| Permission               | Description                             |
+|--------------------------|-----------------------------------------|
+| `systemhomes.home`       | Grants access to all home commands.     |
+| `systemhomes.warp`       | Grants access to /warp and /warps.      |
+| `systemhomes.warp.admin` | Grants access to /setwarp and /delwarp. |
+| `systemhomes.tpa`        | Grants access to all TPA commands.      |
+| `systemhomes.spawn`      | Grants access to /spawn.                |
 
 ## Installation
 

@@ -4,7 +4,6 @@ import moe.sebiann.system.commands.home.*;
 import moe.sebiann.system.commands.warp.*;
 import moe.sebiann.system.commands.tpa.*;
 import moe.sebiann.system.commands.*;
-import moe.sebiann.system.events.PlayerJoinListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -52,9 +51,6 @@ public class SystemHomes extends JavaPlugin {
         getCommand("home").setTabCompleter(new HomeTabCompleter(homesFile));
         getCommand("delhome").setTabCompleter(new HomeTabCompleter(homesFile));
         getCommand("systemhomes").setTabCompleter(new SystemHomesTabCompleter());
-
-        // Register event listener
-        getServer().getPluginManager().registerEvents(new PlayerJoinListener(getConfig()), this);
     }
     private void createHomesFile() {
         homesFile = new File(getDataFolder(), "homes.yml");
