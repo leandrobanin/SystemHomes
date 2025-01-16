@@ -1,8 +1,6 @@
 package moe.sebiann.system;
 
 import co.aikar.commands.PaperCommandManager;
-import moe.sebiann.system.commands.home.*;
-import moe.sebiann.system.commands.warp.*;
 import moe.sebiann.system.commands.tpa.*;
 import moe.sebiann.system.commands.*;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,7 +12,7 @@ public class SystemHomes extends JavaPlugin {
 
     public static SystemHomes plugin = null;
 
-    private File homesFile;
+    public File homesFile;
     private File warpsFile;
 
     @Override
@@ -62,6 +60,7 @@ public class SystemHomes extends JavaPlugin {
     void registerCommands(){
         PaperCommandManager manager = new PaperCommandManager(this);
         manager.registerCommand(new SystemHomesCommand());
+        manager.registerCommand(new HomeCommands(homesFile, this));
     }
 
     private void createHomesFile() {
