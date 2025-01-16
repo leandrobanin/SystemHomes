@@ -17,10 +17,14 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    maven{
+        url = "https://repo.aikar.co/content/groups/aikar/"
+    }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 }
 
 def targetJavaVersion = 21
