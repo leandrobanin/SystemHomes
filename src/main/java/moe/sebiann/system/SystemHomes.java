@@ -1,5 +1,6 @@
 package moe.sebiann.system;
 
+import co.aikar.commands.PaperCommandManager;
 import moe.sebiann.system.commands.home.*;
 import moe.sebiann.system.commands.warp.*;
 import moe.sebiann.system.commands.tpa.*;
@@ -11,11 +12,16 @@ import java.io.IOException;
 
 public class SystemHomes extends JavaPlugin {
 
+    public static SystemHomes plugin = null;
+
     private File homesFile;
     private File warpsFile;
 
     @Override
     public void onEnable() {
+        if(plugin == null){
+            plugin = this;
+        }
         // Save and load the configuration
         saveDefaultConfig();
         // Initialize the homes file
@@ -24,34 +30,40 @@ public class SystemHomes extends JavaPlugin {
 
         TpaManager tpaManager = new TpaManager();
 
-        getCommand("systemhomes").setExecutor(new SystemHomesCommand(this));
+        registerCommands();
 
-        // Register home commands
-        getCommand("sethome").setExecutor(new SetHomeCommand(homesFile, this));
-        getCommand("home").setExecutor(new HomeCommand(homesFile, this));
-        getCommand("homes").setExecutor(new ListHomesCommand(homesFile));
-        getCommand("delhome").setExecutor(new DelHomeCommand(homesFile));
-
-        // Register warp commands
-        getCommand("setwarp").setExecutor(new SetWarpCommand(warpsFile));
-        getCommand("warp").setExecutor(new WarpCommand(warpsFile, this));
-        getCommand("delwarp").setExecutor(new DelWarpCommand(warpsFile));
-        getCommand("warps").setExecutor(new ListWarpsCommand(warpsFile));
-        getCommand("spawn").setExecutor(new SpawnCommand(warpsFile, this));
-
-        // Register tpa commands
-        getCommand("tpa").setExecutor(new TpaCommand(tpaManager));
-        getCommand("tpahere").setExecutor(new TpahereCommand(tpaManager));
-        getCommand("tpaccept").setExecutor(new TpAcceptCommand(tpaManager, this));
-        getCommand("tpdeny").setExecutor(new TpDenyCommand(tpaManager));
-
-        // Register tab completions for warps and homes and reload
-        getCommand("warp").setTabCompleter(new WarpTabCompleter(warpsFile));
-        getCommand("delwarp").setTabCompleter(new WarpTabCompleter(warpsFile));
-        getCommand("home").setTabCompleter(new HomeTabCompleter(homesFile));
-        getCommand("delhome").setTabCompleter(new HomeTabCompleter(homesFile));
-        getCommand("systemhomes").setTabCompleter(new SystemHomesTabCompleter());
+//        // Register home commands
+//        getCommand("sethome").setExecutor(new SetHomeCommand(homesFile, this));
+//        getCommand("home").setExecutor(new HomeCommand(homesFile, this));
+//        getCommand("homes").setExecutor(new ListHomesCommand(homesFile));
+//        getCommand("delhome").setExecutor(new DelHomeCommand(homesFile));
+//
+//        // Register warp commands
+//        getCommand("setwarp").setExecutor(new SetWarpCommand(warpsFile));
+//        getCommand("warp").setExecutor(new WarpCommand(warpsFile, this));
+//        getCommand("delwarp").setExecutor(new DelWarpCommand(warpsFile));
+//        getCommand("warps").setExecutor(new ListWarpsCommand(warpsFile));
+//        getCommand("spawn").setExecutor(new SpawnCommand(warpsFile, this));
+//
+//        // Register tpa commands
+//        getCommand("tpa").setExecutor(new TpaCommand(tpaManager));
+//        getCommand("tpahere").setExecutor(new TpahereCommand(tpaManager));
+//        getCommand("tpaccept").setExecutor(new TpAcceptCommand(tpaManager, this));
+//        getCommand("tpdeny").setExecutor(new TpDenyCommand(tpaManager));
+//
+//        // Register tab completions for warps and homes and reload
+//        getCommand("warp").setTabCompleter(new WarpTabCompleter(warpsFile));
+//        getCommand("delwarp").setTabCompleter(new WarpTabCompleter(warpsFile));
+//        getCommand("home").setTabCompleter(new HomeTabCompleter(homesFile));
+//        getCommand("delhome").setTabCompleter(new HomeTabCompleter(homesFile));
+//        getCommand("systemhomes").setTabCompleter(new SystemHomesTabCompleter());
     }
+
+    void registerCommands(){
+        PaperCommandManager manager = new PaperCommandManager(this);
+        manager.registerCommand(new SystemHomesCommand());
+    }
+
     private void createHomesFile() {
         homesFile = new File(getDataFolder(), "homes.yml");
 
