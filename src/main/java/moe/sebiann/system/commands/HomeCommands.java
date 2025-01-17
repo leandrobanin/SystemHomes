@@ -146,7 +146,7 @@ public class HomeCommands extends BaseCommand {
     }
 
     @CommandAlias("homes")
-    public void homeList(CommandSender sender, String[] args) {
+    public void homeList(CommandSender sender) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage(Component.text("Only a player can run this command.").color(TextColor.fromHexString("#FF5555")));
             return;
@@ -180,7 +180,6 @@ public class HomeCommands extends BaseCommand {
         List<String> homeNameList = new ArrayList<>();
         List<Home> homes = Home.getPlayerHomes(Bukkit.getOfflinePlayer(playerName).getUniqueId());
 
-        int i = 0;
         for(Home h : homes){
             homeNameList.add(h.getHomeName());
         }

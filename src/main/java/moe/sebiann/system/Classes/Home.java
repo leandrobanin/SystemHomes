@@ -1,15 +1,10 @@
 package moe.sebiann.system.Classes;
 
 import moe.sebiann.system.SystemHomes;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.configuration.serialization.SerializableAs;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.io.IOException;
@@ -306,7 +301,7 @@ public class Home extends Location implements Serializable {
     }
 
     public static List<Home> getPlayerHomes(UUID owningPlayer){
-        List<Home> homes = new ArrayList<Home>();
+        List<Home> homes = new ArrayList<>();
         File homesFile = new File(SystemHomes.plugin.getDataFolder(), "homes.yml");
         FileConfiguration config = YamlConfiguration.loadConfiguration(homesFile);
 
