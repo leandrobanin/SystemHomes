@@ -60,7 +60,7 @@ public class SystemHomes extends JavaPlugin {
     void registerCommands(){
         PaperCommandManager manager = new PaperCommandManager(this);
         manager.registerCommand(new SystemHomesCommand());
-        manager.registerCommand(new HomeCommands(homesFile, this));
+        manager.registerCommand(new HomeCommands());
     }
 
     private void createHomesFile() {
