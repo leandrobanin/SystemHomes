@@ -32,15 +32,15 @@ public class HomeCommands extends BaseCommand {
 
     @CommandAlias("sethome")
     public void setHome(CommandSender sender, String[] args) {
-        //checks
         if(!(sender instanceof Player player)) {
             sender.sendMessage(Component.text("Only a player can run this command.").color(TextColor.fromHexString("#FF5555")));
             return;
         }
+
         // Reload the configuration to reflect recent updates
         FileConfiguration homesConfig = YamlConfiguration.loadConfiguration(homesFile);
         if (args.length < 1) {
-            player.sendMessage("§cPlease specify a home name: /sethome <name>");
+            player.sendMessage(Component.text("Please specify a home name: /sethome <name>").color(TextColor.fromHexString("#FF5555")));
             return;
         }
         String homeName = args[0].toLowerCase(); // Normalize the home name
