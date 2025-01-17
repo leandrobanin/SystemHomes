@@ -3,6 +3,7 @@ package moe.sebiann.system.Classes;
 import moe.sebiann.system.SystemHomes;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -14,6 +15,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class Home extends Location implements Serializable {
@@ -240,18 +244,22 @@ public class Home extends Location implements Serializable {
      * @return Home object
      */
     private static Home getHomeFromConfig(FileConfiguration config, String pathPrefix){
+        String[] pathSegments = pathPrefix.split("\\.");
+        String owningPlayer = pathSegments[pathSegments.length - 2];
+        String name = pathSegments[pathSegments.length - 1];
+
         Home home = new Home(
-                config.getString(pathPrefix + "name"),
-                UUID.fromString(config.getString(pathPrefix + "owningPlayer")),
-                config.getString(pathPrefix + "world"),
-                Float.parseFloat(config.getString(pathPrefix + "x")),
-                Float.parseFloat(config.getString(pathPrefix + "y")),
-                Float.parseFloat(config.getString(pathPrefix + "z")),
-                Float.parseFloat(config.getString(pathPrefix + "yaw")),
-                Float.parseFloat(config.getString(pathPrefix + "pitch"))
+                name,
+                UUID.fromString(owningPlayer),
+                config.getString(pathPrefix + ".world"),
+                Float.parseFloat(config.getString(pathPrefix + ".x")),
+                Float.parseFloat(config.getString(pathPrefix + ".y")),
+                Float.parseFloat(config.getString(pathPrefix + ".z")),
+                Float.parseFloat(config.getString(pathPrefix + ".yaw")),
+                Float.parseFloat(config.getString(pathPrefix + ".pitch"))
         );
 
-        home.setPublic(config.getBoolean(pathPrefix + "public"));
+        home.setPublic(config.getBoolean(pathPrefix + ".public", false));
         return home;
     }
 
@@ -295,6 +303,28 @@ public class Home extends Location implements Serializable {
     public static boolean containsHome(String homePath){
         FileConfiguration config = YamlConfiguration.loadConfiguration(new File(SystemHomes.plugin.getDataFolder(), "homes.yml"));
         return config.contains(homePath);
+    }
+
+    public static List<Home> getPlayerHomes(UUID owningPlayer){
+        List<Home> homes = new ArrayList<Home>();
+        File homesFile = new File(SystemHomes.plugin.getDataFolder(), "homes.yml");
+        FileConfiguration config = YamlConfiguration.loadConfiguration(homesFile);
+
+        String playerPath = "homes." + owningPlayer.toString();
+
+        ConfigurationSection section = config.getConfigurationSection(playerPath);
+        if(section == null){
+            return homes;
+        }
+
+        Set<String> homeNames = section.getKeys(false);
+        for (String homeName : homeNames) {
+            String homePath = playerPath + "." + homeName;
+            Home home = getHomeFromConfig(config, homePath);
+            homes.add(home);
+        }
+
+        return homes;
     }
 
 }

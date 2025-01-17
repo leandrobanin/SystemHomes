@@ -81,4 +81,4 @@ prefix: SystemHomes
 #    description: "Teleport to the spawn location."
 #    usage: "/spawn"
 #    permission: systemhomes.spawn
-depend: [Vault] # Vault is essential for handling permissions and economy.
+# depend: [Vault]

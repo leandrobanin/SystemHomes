@@ -1,16 +1,19 @@
 package moe.sebiann.system;
 
 import co.aikar.commands.PaperCommandManager;
+import com.google.common.collect.ImmutableList;
 import moe.sebiann.system.commands.tpa.*;
 import moe.sebiann.system.commands.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class SystemHomes extends JavaPlugin {
 
     public static SystemHomes plugin = null;
+    PaperCommandManager manager;
 
     public File homesFile;
     private File warpsFile;
@@ -29,6 +32,7 @@ public class SystemHomes extends JavaPlugin {
         TpaManager tpaManager = new TpaManager();
 
         registerCommands();
+        commandCompletions();
 
 //        // Register home commands
 //        getCommand("sethome").setExecutor(new SetHomeCommand(homesFile, this));
@@ -58,7 +62,7 @@ public class SystemHomes extends JavaPlugin {
     }
 
     void registerCommands(){
-        PaperCommandManager manager = new PaperCommandManager(this);
+        manager = new PaperCommandManager(this);
         manager.registerCommand(new SystemHomesCommand());
         manager.registerCommand(new HomeCommands());
     }
@@ -97,7 +101,15 @@ public class SystemHomes extends JavaPlugin {
                 e.printStackTrace();
             }
         }
+    }
 
+    void commandCompletions(){
+        manager.getCommandCompletions().registerAsyncCompletion("homeNames", c -> {
+            String playerName = c.getSender().getName();
+
+            List<String> homeNames = HomeCommands.homeNameToString(playerName);
+            return ImmutableList.copyOf(homeNames);
+        });
     }
 
 }

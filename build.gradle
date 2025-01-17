@@ -20,13 +20,15 @@ repositories {
     maven{
         url = "https://repo.aikar.co/content/groups/aikar/"
     }
+
+    maven {
+        url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+    }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
 
-    //SnakeYML for serializing to YML, easier than bukkit's tools
-    implementation 'org.yaml:snakeyaml:2.3'
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
 }
 

@@ -1,7 +1,6 @@
 package moe.sebiann.system.Classes;
 
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.Yaml;
+import org.bukkit.Bukkit;
 
 import java.io.Serializable;
 
@@ -80,4 +79,11 @@ public class Location implements Serializable {
         return this;
     }
 
+    public org.bukkit.Location toBukkitLocation() {
+        return new org.bukkit.Location(
+                Bukkit.getWorld(world),
+                x, y, z,
+                pitch, yaw
+        );
+    }
 }
