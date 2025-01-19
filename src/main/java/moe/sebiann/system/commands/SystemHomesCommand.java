@@ -1,32 +1,25 @@
 package moe.sebiann.system.commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandPermission;
+import co.aikar.commands.annotation.Default;
+import co.aikar.commands.annotation.Subcommand;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
+import moe.sebiann.system.SystemHomes;
 
-public class SystemHomesCommand implements CommandExecutor {
 
-    private final JavaPlugin plugin;
+@CommandAlias("systemhomes")
+public class SystemHomesCommand extends BaseCommand {
 
-    public SystemHomesCommand(JavaPlugin plugin) {
-        this.plugin = plugin;
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("systemhomes.admin.reload")) {
-            sender.sendMessage("§cYou do not have permission to use this command.");
-            return true;
-        }
-
-        if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
-            plugin.reloadConfig();
-            sender.sendMessage("§aSystemHomes configuration reloaded successfully!");
-        } else {
-            sender.sendMessage("§cUsage: /systemhomes reload");
-        }
-
-        return true;
+    @Default
+    @Subcommand("reload")
+    @CommandPermission("systemhomes.admin")
+    public void reload(CommandSender sender, String[] args) {
+        SystemHomes.plugin.reloadConfig();
+        sender.sendMessage(Component.text("SystemHomes configuration reloaded successfully!")
+                .color(TextColor.fromHexString("#55FF55")));
     }
 }
