@@ -27,7 +27,9 @@ public class SystemHomes extends JavaPlugin {
     void registerCommands(){
         manager = new PaperCommandManager(this);
         manager.registerCommand(new SystemHomesCommand());
+
         manager.registerCommand(new HomeCommands());
+        manager.registerCommand(new WarpCommands());
     }
 
     void commandCompletions(){
@@ -36,6 +38,11 @@ public class SystemHomes extends JavaPlugin {
 
             List<String> homeNames = HomeCommands.homeNameToString(playerName);
             return ImmutableList.copyOf(homeNames);
+        });
+
+        manager.getCommandCompletions().registerAsyncCompletion("warpNames", c -> {
+            List<String> warpNames = WarpCommands.warpNameToString();
+            return ImmutableList.copyOf(warpNames);
         });
     }
 
