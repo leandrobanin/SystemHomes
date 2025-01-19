@@ -4,3 +4,4 @@ warp:
   teleport_delay: 2
 tpa:
   teleport_delay: 2
+  request_timeout: 30
