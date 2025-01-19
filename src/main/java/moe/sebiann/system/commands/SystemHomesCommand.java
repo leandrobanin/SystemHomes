@@ -16,7 +16,7 @@ public class SystemHomesCommand extends BaseCommand {
 
     @Default
     @Subcommand("reload")
-    @CommandPermission("systemhomes.admin")
+    @CommandPermission("systemhomes.admin.reload")
     public void reload(CommandSender sender, String[] args) {
         SystemHomes.plugin.reloadConfig();
         sender.sendMessage(Component.text("SystemHomes configuration reloaded successfully!")
