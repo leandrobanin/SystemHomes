@@ -31,6 +31,7 @@ public class SystemHomes extends JavaPlugin {
         manager.registerCommand(new HomeCommands());
         manager.registerCommand(new WarpCommands());
         manager.registerCommand(new SpawnCommand());
+        manager.registerCommand(new TpaCommands());
     }
 
     void commandCompletions(){
