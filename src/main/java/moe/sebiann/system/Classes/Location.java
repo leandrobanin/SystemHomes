@@ -83,7 +83,7 @@ public class Location implements Serializable {
         return new org.bukkit.Location(
                 Bukkit.getWorld(world),
                 x, y, z,
-                pitch, yaw
+                yaw, pitch
         );
     }
 }
