@@ -5,8 +5,9 @@ A customizable plugin for Minecraft servers built using Spigot/Bukkit API. This 
 ## Features
 
 - Manage homes with `/sethome`, `/home`, and `/homes`.
-- Manage warps with `/setwarp`, `/warp`, `/delwarp`, and `/warps`.
 - Teleport to other players with `/tpa`, `/tpaccept`, and `/tpdeny`.
+- Manage warps with `/setwarp`, `/warp`, `/delwarp`, and `/warps`.
+- Do `/spawn` to `/warp spawn`
 
 ## Commands
 
@@ -46,24 +47,22 @@ warp:
   teleport_delay: 2
 tpa:
   teleport_delay: 2
+  request_timeout: 30
 ```
 
 ## Permissions
+Do these even work atm?
 
-| Permission               | Description                             |
-|--------------------------|-----------------------------------------|
-| `systemhomes.home`       | Grants access to all home commands.     |
-| `systemhomes.warp`       | Grants access to /warp and /warps.      |
-| `systemhomes.warp.admin` | Grants access to /setwarp and /delwarp. |
-| `systemhomes.tpa`        | Grants access to all TPA commands.      |
-| `systemhomes.spawn`      | Grants access to /spawn.                |
+| Permission                  | Description                           |
+|-----------------------------|---------------------------------------|
+| `systemhomes.admin.warps.*` | Grants access to set and delete warp. |
 
 ## Installation
 
 1. Download the plugin's `.jar` file.
 2. Place the `.jar` file in your server's `plugins` folder.
 3. Restart or reload your server.
-4. Edit the `config.yml` file in the `plugins/system` folder to customize settings.
+4. Edit the `config.yml` file in the `plugins/SystemHomes` folder to customize settings.
 5. Use the commands in-game to enjoy the plugin!
 
 ## Contributing
@@ -71,7 +70,6 @@ tpa:
 Contributions are welcome! Please fork the repository and submit a pull request with your changes.
 
 ## License
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![GNU GPLv3 License](https://img.shields.io/badge/License-GPLv3-green.svg)](https://choosealicense.com/licenses/gpl-3.0/)
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
+This project is licensed under the GNU GPLv3 License. See the `LICENSE` file for details.
