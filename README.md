@@ -1,4 +1,5 @@
 # Seb's SystemHomes Plugin
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/CloudieSMP/SystemHomes/Validate-Build.yml)
 
 A customizable plugin for Minecraft servers built using Spigot/Bukkit API. This plugin allows players to sethomes, warp and tpa.
 
