@@ -32,6 +32,7 @@ public class SystemHomes extends JavaPlugin {
         manager.registerCommand(new WarpCommands());
         manager.registerCommand(new SpawnCommand());
         manager.registerCommand(new TpaCommands());
+        manager.registerCommand(new PlayerWarpCommands());
     }
 
     void commandCompletions(){
@@ -44,6 +45,11 @@ public class SystemHomes extends JavaPlugin {
 
         manager.getCommandCompletions().registerAsyncCompletion("warpNames", c -> {
             List<String> warpNames = WarpCommands.warpNameToString();
+            return ImmutableList.copyOf(warpNames);
+        });
+
+        manager.getCommandCompletions().registerAsyncCompletion("pwarpNames", c -> {
+            List<String> warpNames = PlayerWarpCommands.pwarpNameToString();
             return ImmutableList.copyOf(warpNames);
         });
     }

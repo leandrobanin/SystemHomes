@@ -2,6 +2,9 @@ home:
   teleport_delay: 2
 warp:
   teleport_delay: 2
+pwarp:
+  teleport_delay: 2
+  max_warps: 3
 tpa:
   teleport_delay: 2
   request_timeout: 30
