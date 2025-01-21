@@ -156,7 +156,7 @@ public class HomeCommands extends BaseCommand {
 
         List<Home> homes = Home.getPlayerHomes(player.getUniqueId());
 
-        Component component = Component.text("Your Homes:\n").color(TextColor.fromHexString("#FFAA00"));
+        Component component = Component.text("Your Homes (" + homes.size() + "):\n").color(TextColor.fromHexString("#FFAA00"));
         for (Home home : homes) {
             component = component.append(Component.text(home.getHomeName()).color(TextColor.fromHexString("#FFAA00"))
                     .clickEvent(ClickEvent.runCommand("/home " + home.getHomeName()))

@@ -184,7 +184,7 @@ public class PlayerWarpCommands extends BaseCommand {
 
         List<PlayerWarp> warps = PlayerWarp.getPlayerWarps();
 
-        Component component = Component.text("The server's PlayerWarps:\n").color(TextColor.fromHexString("#FFAA00"));
+        Component component = Component.text("The servers PlayerWarps (" + warps.size() + "):\n").color(TextColor.fromHexString("#FFAA00"));
         for (PlayerWarp warp : warps) {
             component = component.append(Component.text(warp.getWarpName()).color(TextColor.fromHexString("#FFAA00"))
                     .clickEvent(ClickEvent.runCommand("/pwarp " + warp.getWarpName()))
