@@ -37,18 +37,19 @@ public class WarpCommands extends BaseCommand {
             return;
         }
 
-        String warpPath = "warps." + args[0];
+        String warpName = args[0].toLowerCase();
+        String warpPath = "warps." + warpName;
         Warp warp = new Warp(
-                args[0],
+                warpName,
                 new Location(player.getLocation())
         );
 
         if(Warp.containsWarp(warpPath)) {
-            if(pendingOverwrittenConfirmations.contains(args[0])) {
+            if(pendingOverwrittenConfirmations.contains(warpName)) {
 
                 try{
                     warp.uploadWarp();
-                    pendingOverwrittenConfirmations.remove(args[0]);
+                    pendingOverwrittenConfirmations.remove(warpName);
                 }catch(Exception e) {
                     player.sendMessage(Component.text("Failed to upload Warp, please try again later.").color(TextColor.fromHexString("#FF5555")));
                     return;
@@ -60,7 +61,7 @@ public class WarpCommands extends BaseCommand {
                 return;
             }
 
-            pendingOverwrittenConfirmations.add(args[0]);
+            pendingOverwrittenConfirmations.add(warpName);
             player.sendMessage(Component.text("Warp ").color(TextColor.fromHexString("#FF5555"))
                     .append(Component.text(warp.getWarpName()).color(TextColor.fromHexString("#AA0000")))
                     .append(Component.text(" already exists! Use: ").color(TextColor.fromHexString("#FF5555")))
@@ -132,7 +133,7 @@ public class WarpCommands extends BaseCommand {
 
         Warp warp;
         try{
-            warp = Warp.getWarp(args[0]);
+            warp = Warp.getWarp(args[0].toLowerCase());
         }catch (RuntimeException e){
             player.sendMessage(Component.text("This warp does not exist.").color(TextColor.fromHexString("#FF5555")));
             return;
