@@ -35,25 +35,26 @@ public class PlayerWarpCommands extends BaseCommand {
             return;
         }
 
-        String warpPath = "warps." + args[0];
+        String warpName = args[0].toLowerCase();
+        String warpPath = "warps." + warpName;
         PlayerWarp warp = new PlayerWarp(
-                args[0],
+                warpName,
                 player.getUniqueId(),
                 new Location(player.getLocation())
         );
 
         if(PlayerWarp.containsPlayerWarp(warpPath)) {
 
-            PlayerWarp pwarp = PlayerWarp.getPlayerWarp(args[0]);
+            PlayerWarp pwarp = PlayerWarp.getPlayerWarp(warpName);
             if(!pwarp.getOwningPlayer().equals(player.getUniqueId()) || !player.hasPermission("systemhomes.admin.pwarp")) {
                 player.sendMessage(Component.text("You may not modify someone else's PlayerWarp!").color(TextColor.fromHexString("#FF5555")));
                 return;
             }
 
-            if(pendingOverwrittenConfirmations.contains(args[0])) {
+            if(pendingOverwrittenConfirmations.contains(warpName)) {
                 try{
                     warp.uploadPlayerWarp();
-                    pendingOverwrittenConfirmations.remove(args[0]);
+                    pendingOverwrittenConfirmations.remove(warpName);
                 }catch(Exception e) {
                     player.sendMessage(Component.text("Failed to upload PlayerWarp, please try again later.").color(TextColor.fromHexString("#FF5555")));
                     return;
@@ -65,7 +66,7 @@ public class PlayerWarpCommands extends BaseCommand {
                 return;
             }
 
-            pendingOverwrittenConfirmations.add(args[0]);
+            pendingOverwrittenConfirmations.add(warpName);
             player.sendMessage(Component.text("PlayerWarp ").color(TextColor.fromHexString("#FF5555"))
                     .append(Component.text(warp.getWarpName()).color(TextColor.fromHexString("#AA0000")))
                     .append(Component.text(" already exists! Use: ").color(TextColor.fromHexString("#FF5555")))
@@ -155,7 +156,7 @@ public class PlayerWarpCommands extends BaseCommand {
 
         PlayerWarp warp;
         try{
-            warp = PlayerWarp.getPlayerWarp(args[0]);
+            warp = PlayerWarp.getPlayerWarp(args[0].toLowerCase());
         }catch (RuntimeException e){
             player.sendMessage(Component.text("This warp does not exist.").color(TextColor.fromHexString("#FF5555")));
             return;
