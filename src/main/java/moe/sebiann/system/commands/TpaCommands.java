@@ -3,6 +3,7 @@ package moe.sebiann.system.commands;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
+import co.aikar.commands.annotation.CommandPermission;
 import moe.sebiann.system.Classes.TpaRequest;
 import moe.sebiann.system.Enums.TpaType;
 import moe.sebiann.system.SystemHomes;
@@ -18,6 +19,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+@CommandPermission("systemhomes.player.tpa")
 public class TpaCommands extends BaseCommand {
 
     List<TpaRequest> tpaRequests = new ArrayList<>();
@@ -185,7 +187,7 @@ public class TpaCommands extends BaseCommand {
 
     @CommandAlias("tpdeny|tpno")
     @SuppressWarnings("DuplicatedCode")
-    public void tpdeny(CommandSender sender, String[] args) {
+    public void tpdeny(CommandSender sender) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage(Component.text("Only a player can run this command.").color(TextColor.fromHexString("#FF5555")));
             return;

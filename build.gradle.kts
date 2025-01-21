@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "moe.sebiann"
-version = "0.1.3"
+version = "0.4.0"
 
 repositories {
     mavenCentral()

@@ -3,6 +3,7 @@ package moe.sebiann.system.commands;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
+import co.aikar.commands.annotation.CommandPermission;
 import moe.sebiann.system.Classes.Home;
 import moe.sebiann.system.Classes.Location;
 import moe.sebiann.system.SystemHomes;
@@ -16,6 +17,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
+@CommandPermission("systemhomes.player.home")
 public class HomeCommands extends BaseCommand {
 
     private final Map<UUID, String> pendingConfirmations = new HashMap<>();

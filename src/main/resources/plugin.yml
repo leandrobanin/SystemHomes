@@ -5,3 +5,19 @@ api-version: '1.21.4'
 authors: [ Sebiann, Beauver ]
 website: sebiann.moe
 prefix: SystemHomes
+permissions:
+  systemhomes.admin.*:
+    description: "This is for admins only"
+    default: op
+    children:
+      systemhomes.admin.reload: true
+      systemhomes.admin.warp: true
+      systemhomes.admin.pwarp: true
+  systemhomes.player.*:
+    description: "This is for all players"
+    default: not op
+    children:
+      systemhomes.player.tpa: true
+      systemhomes.player.home: true
+      systemhomes.player.warp: true
+      systemhomes.player.pwarp: true

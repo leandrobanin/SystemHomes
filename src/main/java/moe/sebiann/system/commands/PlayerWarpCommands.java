@@ -6,7 +6,6 @@ import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
 import moe.sebiann.system.Classes.Location;
 import moe.sebiann.system.Classes.PlayerWarp;
-import moe.sebiann.system.Classes.Warp;
 import moe.sebiann.system.SystemHomes;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -15,18 +14,17 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@CommandPermission("systemhomes.player.pwarp")
 public class PlayerWarpCommands extends BaseCommand {
 
     List<String> pendingOverwrittenConfirmations = new ArrayList<>();
 
     @CommandAlias("setplayerwarp|setpwarp")
     @CommandCompletion("@nothing")
-    @CommandPermission("systemhomes.playerwarp.set")
     public void setPlayerWarp(CommandSender sender, String[] args) {
         if(!(sender instanceof Player player)) {
             sender.sendMessage(Component.text("Only a player can run this command.").color(TextColor.fromHexString("#FF5555")));
@@ -97,7 +95,6 @@ public class PlayerWarpCommands extends BaseCommand {
 
     @CommandAlias("delplayerwarp|delpwarp|remplayerwarp|rempwarp")
     @CommandCompletion("@pwarpNames")
-    @CommandPermission("systemhomes.playerwarp.remove")
     public void delPlayerWarp(CommandSender sender, String[] args){
         if(!(sender instanceof Player player)) {
             sender.sendMessage(Component.text("Only a player can run this command.").color(TextColor.fromHexString("#FF5555")));
@@ -117,7 +114,7 @@ public class PlayerWarpCommands extends BaseCommand {
             return;
         }
 
-        if(!warp.getOwningPlayer().equals(player.getUniqueId()) && !player.hasPermission("systemhomes.playerwarp.admin.remove")){
+        if(!warp.getOwningPlayer().equals(player.getUniqueId()) && !player.hasPermission("systemhomes.admin.pwarp")){
             player.sendMessage(Component.text("You can not delete this PlayerWarp as it does not belong to you!").color(TextColor.fromHexString("#FF5555")));
             return;
         }
@@ -172,7 +169,7 @@ public class PlayerWarpCommands extends BaseCommand {
     }
 
     @CommandAlias("playerwarps|pwarps")
-    public void getPlayerWarps(CommandSender sender, String[] args){
+    public void getPlayerWarps(CommandSender sender){
         if (!(sender instanceof Player player)) {
             sender.sendMessage(Component.text("Only a player can run this command.").color(TextColor.fromHexString("#FF5555")));
             return;
@@ -194,7 +191,7 @@ public class PlayerWarpCommands extends BaseCommand {
                 default -> warp.world;
             };
 
-            component = component.append(Component.text("(" + worldName + ", " + Bukkit.getOfflinePlayer(warp.getOwningPlayer()).getName() + "; " + (int) warp.x + ", " + (int) warp.y + ", " + (int) warp.z + ")\n").color(TextColor.fromHexString("#55FFFF"))
+            component = component.append(Component.text("(" + Bukkit.getOfflinePlayer(warp.getOwningPlayer()).getName() + "; " + worldName + ", " + (int) warp.x + ", " + (int) warp.y + ", " + (int) warp.z + ")\n").color(TextColor.fromHexString("#55FFFF"))
                     .clickEvent(ClickEvent.runCommand("/pwarp " + warp.getWarpName()))
                     .hoverEvent(HoverEvent.showText(Component.text("Teleport to PlayerWarp: " + warp.getWarpName()).color(TextColor.fromHexString("#FFAA00")))));
         }

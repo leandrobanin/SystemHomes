@@ -1,16 +1,25 @@
 # Seb's SystemHomes Plugin
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/CloudieSMP/SystemHomes/Validate-Build.yml)
 
-A customizable plugin for Minecraft servers built using Spigot/Bukkit API. This plugin allows players to sethomes, warp and tpa.
+A customizable plugin for Minecraft Paper servers. This plugin allows players to sethomes, warps, playerwarps and tpa.
 
 ## Features
 
 - Manage homes with `/sethome`, `/home`, and `/homes`.
 - Teleport to other players with `/tpa`, `/tpaccept`, and `/tpdeny`.
 - Manage warps with `/setwarp`, `/warp`, `/delwarp`, and `/warps`.
+- Manage player warps with `/setpwarp`, `/pwarp`, `/delpwarp`, and `/pwarps`.
 - Do `/spawn` to `/warp spawn`
 
 ## Commands
+
+### TPA Commands
+| Command             | Description                                     |
+|---------------------|-------------------------------------------------|
+| `/tpa <player>`     | Request to teleport to another player.          |
+| `/tpahere <player>` | Request to teleport another player to yourself. |
+| `/tpaccept`         | Accept a teleport request.                      |
+| `/tpdeny`           | Deny a teleport request.                        |
 
 ### Home Commands
 | Command           | Description                         |
@@ -29,13 +38,13 @@ A customizable plugin for Minecraft servers built using Spigot/Bukkit API. This 
 | `/warps`          | List all available warps.               |
 | `/spawn`          | Teleports to the spawn warp.            |
 
-### TPA Commands
-| Command             | Description                                     |
-|---------------------|-------------------------------------------------|
-| `/tpa <player>`     | Request to teleport to another player.          |
-| `/tpahere <player>` | Request to teleport another player to yourself. |
-| `/tpaccept`         | Accept a teleport request.                      |
-| `/tpdeny`           | Deny a teleport request.                        |
+### Player Warp Commands
+| Command            | Description                             |
+|--------------------|-----------------------------------------|
+| `/setpwarp <name>` | Set a player warp with a specific name. |
+| `/delpwarp <name>` | Delete a player warp.                   |
+| `/pwarp <name>`    | Teleport to a player warp.              |
+| `/pwarps`          | List all available player warps.        |
 
 ## Configuration
 
@@ -46,6 +55,9 @@ home:
   teleport_delay: 2
 warp:
   teleport_delay: 2
+pwarp:
+  teleport_delay: 2
+  max_warps: 3
 tpa:
   teleport_delay: 2
   request_timeout: 30
@@ -54,9 +66,20 @@ tpa:
 ## Permissions
 Do these even work atm?
 
-| Permission                  | Description                           |
-|-----------------------------|---------------------------------------|
-| `systemhomes.admin.warps.*` | Grants access to set and delete warp. |
+| Admin Permission           | Description                              |
+|----------------------------|------------------------------------------|
+| `systemhomes.admin.*`      | Grants access to all admin perms.        |
+| `systemhomes.admin.reload` | Grants access to reload.                 |
+| `systemhomes.admin.warp`   | Grants access to set and delete warp.    |
+| `systemhomes.admin.pwarp`  | Grants access to delete all playerwarps. |
+
+| Player Permissions (default) | Description                                           |
+|------------------------------|-------------------------------------------------------|
+| `systemhomes.player.*`       | Grants access to all player perms.                    |
+| `systemhomes.player.tpa`     | Grants access to use tpa and tpahere.                 |
+| `systemhomes.player.home`    | Grants access to use and set homes.                   |
+| `systemhomes.player.warp`    | Grants access to use warps.                           |
+| `systemhomes.player.pwarp`   | Grants access to use, set and delete own playerwarps. |
 
 ## Installation
 

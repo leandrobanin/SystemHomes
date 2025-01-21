@@ -18,13 +18,14 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+@CommandPermission("systemhomes.player.warp")
 public class WarpCommands extends BaseCommand {
 
     List<String> pendingOverwrittenConfirmations = new ArrayList<>();
 
     @CommandAlias("setwarp")
     @CommandCompletion("@nothing")
-    @CommandPermission("systemhomes.admin.warps.set")
+    @CommandPermission("systemhomes.admin.warp")
     public void setWarp(CommandSender sender, String[] args) {
         if(!(sender instanceof Player player)) {
             sender.sendMessage(Component.text("Only a player can run this command.").color(TextColor.fromHexString("#FF5555")));
@@ -84,7 +85,7 @@ public class WarpCommands extends BaseCommand {
 
     @CommandAlias("delwarp")
     @CommandCompletion("@warpNames")
-    @CommandPermission("systemhomes.admin.warps.delete")
+    @CommandPermission("systemhomes.admin.warp")
     public void delWarp(CommandSender sender, String[] args) {
         if(!(sender instanceof Player player)) {
             sender.sendMessage(Component.text("Only a player can run this command.").color(TextColor.fromHexString("#FF5555")));
