@@ -43,6 +43,13 @@ public class PlayerWarpCommands extends BaseCommand {
         );
 
         if(PlayerWarp.containsPlayerWarp(warpPath)) {
+
+            PlayerWarp pwarp = PlayerWarp.getPlayerWarp(args[0]);
+            if(!pwarp.getOwningPlayer().equals(player.getUniqueId()) || !player.hasPermission("systemhomes.admin.pwarp")) {
+                player.sendMessage(Component.text("You may not modify someone else's PlayerWarp!").color(TextColor.fromHexString("#FF5555")));
+                return;
+            }
+
             if(pendingOverwrittenConfirmations.contains(args[0])) {
                 try{
                     warp.uploadPlayerWarp();
