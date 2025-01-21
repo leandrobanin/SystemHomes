@@ -66,12 +66,12 @@ tpa:
 ## Permissions
 Do these even work atm?
 
-| Admin Permission           | Description                              |
-|----------------------------|------------------------------------------|
-| `systemhomes.admin.*`      | Grants access to all admin perms.        |
-| `systemhomes.admin.reload` | Grants access to reload.                 |
-| `systemhomes.admin.warp`   | Grants access to set and delete warp.    |
-| `systemhomes.admin.pwarp`  | Grants access to delete all playerwarps. |
+| Admin Permission           | Description                                         |
+|----------------------------|-----------------------------------------------------|
+| `systemhomes.admin.*`      | Grants access to all admin perms.                   |
+| `systemhomes.admin.reload` | Grants access to reload.                            |
+| `systemhomes.admin.warp`   | Grants access to set and delete warp.               |
+| `systemhomes.admin.pwarp`  | Grants access to delete and modify all PlayerWarps. |
 
 | Player Permissions (default) | Description                                           |
 |------------------------------|-------------------------------------------------------|
