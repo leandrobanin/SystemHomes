@@ -155,7 +155,7 @@ public class PlayerWarpCommands extends BaseCommand {
 
         PlayerWarp warp;
         try{
-            warp = PlayerWarp.getPlayerWarp(args[0].toLowerCase());
+            warp = PlayerWarp.getPlayerWarp(args[0]);
         }catch (RuntimeException e){
             player.sendMessage(Component.text("This warp does not exist.").color(TextColor.fromHexString("#FF5555")));
             return;
