@@ -199,7 +199,7 @@ public class PlayerWarpCommands extends BaseCommand {
                 default -> warp.world;
             };
 
-            component = component.append(Component.text("(" + Bukkit.getOfflinePlayer(warp.getOwningPlayer()).getName() + "; " + worldName + ", " + (int) warp.x + ", " + (int) warp.y + ", " + (int) warp.z + ")\n").color(TextColor.fromHexString("#55FFFF"))
+            component = component.append(Component.text("(" + Bukkit.getOfflinePlayer(warp.getOwningPlayer()).getName() + "; " + worldName + "; " + (int) warp.x + ", " + (int) warp.y + ", " + (int) warp.z + ")\n").color(TextColor.fromHexString("#55FFFF"))
                     .clickEvent(ClickEvent.runCommand("/pwarp " + warp.getWarpName()))
                     .hoverEvent(HoverEvent.showText(Component.text("Teleport to PlayerWarp: " + warp.getWarpName()).color(TextColor.fromHexString("#FFAA00")))));
         }
