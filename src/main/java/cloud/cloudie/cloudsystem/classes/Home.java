@@ -1,4 +1,4 @@
-package cloud.cloudie.cloudsystem.Classes;
+package cloud.cloudie.cloudsystem.classes;
 
 import cloud.cloudie.cloudsystem.SystemHomes;
 import org.bukkit.OfflinePlayer;
@@ -19,7 +19,7 @@ import java.util.UUID;
 public class Home extends Location implements Serializable {
 
     String name;
-    UUID owningPlayer;
+    final UUID owningPlayer;
     boolean isPublic = false;
 
     //<editor-fold desc="Constructor Overloading">

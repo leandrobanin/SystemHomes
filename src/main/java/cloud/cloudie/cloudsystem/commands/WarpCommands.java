@@ -4,8 +4,8 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
-import cloud.cloudie.cloudsystem.Classes.Location;
-import cloud.cloudie.cloudsystem.Classes.Warp;
+import cloud.cloudie.cloudsystem.classes.Location;
+import cloud.cloudie.cloudsystem.classes.Warp;
 import cloud.cloudie.cloudsystem.SystemHomes;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -21,7 +21,7 @@ import java.util.List;
 @CommandPermission("systemhomes.player.warp")
 public class WarpCommands extends BaseCommand {
 
-    List<String> pendingOverwrittenConfirmations = new ArrayList<>();
+    final List<String> pendingOverwrittenConfirmations = new ArrayList<>();
 
     @CommandAlias("setwarp")
     @CommandCompletion("@nothing")

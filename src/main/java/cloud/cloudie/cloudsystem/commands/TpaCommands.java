@@ -4,8 +4,8 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
-import cloud.cloudie.cloudsystem.Classes.TpaRequest;
-import cloud.cloudie.cloudsystem.Enums.TpaType;
+import cloud.cloudie.cloudsystem.classes.TpaRequest;
+import cloud.cloudie.cloudsystem.enums.TpaType;
 import cloud.cloudie.cloudsystem.SystemHomes;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -22,7 +22,7 @@ import java.util.List;
 @CommandPermission("systemhomes.player.tpa")
 public class TpaCommands extends BaseCommand {
 
-    List<TpaRequest> tpaRequests = new ArrayList<>();
+    final List<TpaRequest> tpaRequests = new ArrayList<>();
 
     @CommandAlias("tpa")
     @CommandCompletion("@players")

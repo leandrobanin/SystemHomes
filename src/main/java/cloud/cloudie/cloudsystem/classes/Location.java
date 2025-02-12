@@ -1,4 +1,4 @@
-package cloud.cloudie.cloudsystem.Classes;
+package cloud.cloudie.cloudsystem.classes;
 
 import org.bukkit.Bukkit;
 
@@ -6,12 +6,12 @@ import java.io.Serializable;
 
 public class Location implements Serializable {
 
-    public float x;
-    public float y;
-    public float z;
+    public final float x;
+    public final float y;
+    public final float z;
     public float yaw = 0;
     public float pitch = 0;
-    public String world;
+    public final String world;
 
     //<editor-fold desc="Constructor Overloading">
     /**

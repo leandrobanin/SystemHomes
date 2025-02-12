@@ -1,4 +1,4 @@
-package cloud.cloudie.cloudsystem.Classes;
+package cloud.cloudie.cloudsystem.classes;
 
 import cloud.cloudie.cloudsystem.SystemHomes;
 import org.bukkit.configuration.ConfigurationSection;
@@ -11,81 +11,36 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
-public class Warp extends Location{
+@SuppressWarnings("unused")
+public class PlayerWarp extends Warp{
 
-    String warpName;
+    final UUID owningPlayer;
 
-    //<editor-fold desc="Constructors">
-    /**
-     * Creates a warp object
-     * @param warpName The name of the warp
-     * @param location The location of the warp
-     */
-    public Warp(String warpName, Location location) {
-        super(location);
-        this.warpName = warpName;
+    public PlayerWarp(String warpName, UUID owningPlayer, org.bukkit.Location location) {
+        super(warpName, location);
+        this.owningPlayer = owningPlayer;
     }
 
-    /**
-     * Creates a warp object
-     * @param warpName The name of the warp
-     * @param location The bukkit location of the warp
-     */
-    public Warp(String warpName, org.bukkit.Location location) {
-        super(location);
-        this.warpName = warpName;
+    public PlayerWarp(String warpName,  UUID owningPlayer, Location location) {
+        super(warpName, location);
+        this.owningPlayer = owningPlayer;
     }
 
-    /**
-     * Creates a warp object
-     * @param warpName The name of the warp
-     * @param world The world of the warp
-     * @param x The X-Coordinate of the warp
-     * @param y The Y-Coordinate of the warp
-     * @param z The Z-Coordinate of the warp
-     */
-    public Warp(String warpName, String world, float x, float y, float z) {
-        super(world, x, y, z);
-        this.warpName = warpName;
+    public PlayerWarp(String warpName, UUID owningPlayer, String world, float x, float y, float z, float yaw, float pitch) {
+        super(warpName, world, x, y, z, yaw, pitch);
+        this.owningPlayer = owningPlayer;
     }
 
-    /**
-     *
-     * Creates a warp object
-     * @param warpName The name of the warp
-     * @param world The world of the warp
-     * @param x The X-Coordinate of the warp
-     * @param y The Y-Coordinate of the warp
-     * @param z The Z-Coordinate of the warp
-     * @param yaw The yaw of the warp
-     * @param pitch The pitch of the warp
-     */
-    public Warp(String warpName, String world, float x, float y, float z, float yaw, float pitch) {
-        super(world, x, y, z, yaw, pitch);
-        this.warpName = warpName;
-    }
-    //</editor-fold>
-
-    //<editor-fold desc="Getters & Setters">
-
-    /**
-     * @return Gets the warp name
-     */
-    public String getWarpName() {
-        return warpName;
+    public PlayerWarp(String warpName, UUID owningPlayer, String world, float x, float y, float z) {
+        super(warpName, world, x, y, z);
+        this.owningPlayer = owningPlayer;
     }
 
-    /**
-     * Sets the warp name
-     * @param warpName New name for this warp
-     */
-    @SuppressWarnings("unused")
-    public void setWarpName(String warpName) {
-        this.warpName = warpName;
+    public UUID getOwningPlayer() {
+        return owningPlayer;
     }
-    //</editor-fold>
-
 
     /**
      * Creates the YAML FileConfig of this class
@@ -93,7 +48,7 @@ public class Warp extends Location{
      */
     @SuppressWarnings("DuplicatedCode")
     private FileConfiguration toYamlConfiguration(){
-        File warpFile = new File(SystemHomes.plugin.getDataFolder(), "warps.yml");
+        File warpFile = new File(SystemHomes.plugin.getDataFolder(), "playerwarps.yml");
 
         if (!warpFile.exists()) {
             try {
@@ -101,10 +56,10 @@ public class Warp extends Location{
                     SystemHomes.plugin.getLogger().info("Created plugin data directory.");
                 }
                 if (warpFile.createNewFile()) {
-                    SystemHomes.plugin.getLogger().info("Created warps.yml file.");
+                    SystemHomes.plugin.getLogger().info("Created playerwarps.yml file.");
                 }
             } catch (IOException e) {
-                SystemHomes.plugin.getLogger().severe("Could not create warps.yml file!" + e.getMessage());
+                SystemHomes.plugin.getLogger().severe("Could not create playerwarps.yml file!" + e.getMessage());
             }
         }
 
@@ -112,6 +67,7 @@ public class Warp extends Location{
         String path = "warps." + warpName;
 
         config.set(path + ".world", world);
+        config.set(path + ".player", owningPlayer.toString());
         config.set(path + ".x", x);
         config.set(path + ".y", y);
         config.set(path + ".z", z);
@@ -123,17 +79,16 @@ public class Warp extends Location{
     /**
      * @return the YAML string from this class
      */
-    @SuppressWarnings("unused")
     public String toYamlString(){
         return toYamlConfiguration().toString();
     }
 
     /**
-     * Adds the warp to the warps.yml file
+     * Adds the warp to the playerwarps.yml file
      * @throws RuntimeException May throw a runtime exception if it can not write the file
      */
-    public void uploadWarp(){
-        File warpsFile = new File(SystemHomes.plugin.getDataFolder(), "warps.yml");
+    public void uploadPlayerWarp(){
+        File warpsFile = new File(SystemHomes.plugin.getDataFolder(), "playerwarps.yml");
         try {
             toYamlConfiguration().save(warpsFile);
         } catch (IOException e) {
@@ -142,11 +97,11 @@ public class Warp extends Location{
     }
 
     /**
-     * Deletes a home from the warps.yml file
+     * Deletes a home from the playerwarps.yml file
      * @throws RuntimeException May throw a runtime exception if it can not write the file
      */
-    public void deleteWarp() {
-        File warpsFile = new File(SystemHomes.plugin.getDataFolder(), "warps.yml");
+    public void deletePlayerWarp() {
+        File warpsFile = new File(SystemHomes.plugin.getDataFolder(), "playerwarps.yml");
         YamlConfiguration config = YamlConfiguration.loadConfiguration(warpsFile);
         String path = "warps." + warpName;
 
@@ -156,7 +111,7 @@ public class Warp extends Location{
             try {
                 config.save(warpsFile);
             } catch (IOException e) {
-                throw new RuntimeException("Could not save updated warps.yml file", e);
+                throw new RuntimeException("Could not save updated playerwarps.yml file", e);
             }
         }
     }
@@ -168,12 +123,13 @@ public class Warp extends Location{
      * @return Home object
      */
     @SuppressWarnings("ConstantConditions")
-    private static Warp getWarpFromConfig(FileConfiguration config, String pathPrefix){
+    private static PlayerWarp getPlayerWarpFromConfig(FileConfiguration config, String pathPrefix){
         String[] pathSegments = pathPrefix.split("\\.");
         String name = pathSegments[pathSegments.length - 1];
 
-        return new Warp(
+        return new PlayerWarp(
                 name,
+                UUID.fromString(config.getString(pathPrefix + ".player")),
                 config.getString(pathPrefix + ".world"),
                 Float.parseFloat(config.getString(pathPrefix + ".x")),
                 Float.parseFloat(config.getString(pathPrefix + ".y")),
@@ -188,11 +144,10 @@ public class Warp extends Location{
      * @param yamlString the YAML string of the object
      * @return Home object
      */
-    @SuppressWarnings("unused")
-    public static Warp fromYamlString(String yamlString) {
+    public static PlayerWarp fromYamlString(String yamlString) {
         FileConfiguration config = YamlConfiguration.loadConfiguration(new StringReader(yamlString));
         String pathPrefix = "warps.";
-        return getWarpFromConfig(config, pathPrefix);
+        return getPlayerWarpFromConfig(config, pathPrefix);
     }
 
     /**
@@ -200,20 +155,20 @@ public class Warp extends Location{
      * @param name The home name
      * @return The home object
      */
-    public static Warp getWarp(String name) {
-        FileConfiguration config = YamlConfiguration.loadConfiguration(new File(SystemHomes.plugin.getDataFolder(), "warps.yml"));
+    public static PlayerWarp getPlayerWarp(String name) {
+        FileConfiguration config = YamlConfiguration.loadConfiguration(new File(SystemHomes.plugin.getDataFolder(), "playerwarps.yml"));
         String pathPrefix = "warps." + name;
 
         if (!config.contains(pathPrefix)) {
             throw new IllegalArgumentException("Warp '" + name + "' does not exist in the file.");
         }
 
-        return getWarpFromConfig(config, pathPrefix);
+        return getPlayerWarpFromConfig(config, pathPrefix);
     }
 
-    public static List<Warp> getWarps(){
-        List<Warp> warps = new ArrayList<>();
-        File warpsFile = new File(SystemHomes.plugin.getDataFolder(), "warps.yml");
+    public static List<PlayerWarp> getPlayerWarps(){
+        List<PlayerWarp> warps = new ArrayList<>();
+        File warpsFile = new File(SystemHomes.plugin.getDataFolder(), "playerwarps.yml");
         FileConfiguration config = YamlConfiguration.loadConfiguration(warpsFile);
 
         String path = "warps.";
@@ -226,15 +181,15 @@ public class Warp extends Location{
         Set<String> warpNames = section.getKeys(false);
         for (String warpName : warpNames) {
             String warpPath = path + warpName;
-            Warp warp = getWarpFromConfig(config, warpPath);
+            PlayerWarp warp = getPlayerWarpFromConfig(config, warpPath);
             warps.add(warp);
         }
 
         return warps;
     }
 
-    public static boolean containsWarp(String warpPath){
-        FileConfiguration config = YamlConfiguration.loadConfiguration(new File(SystemHomes.plugin.getDataFolder(), "warps.yml"));
+    public static boolean containsPlayerWarp(String warpPath){
+        FileConfiguration config = YamlConfiguration.loadConfiguration(new File(SystemHomes.plugin.getDataFolder(), "playerwarps.yml"));
         return config.contains(warpPath);
     }
 }

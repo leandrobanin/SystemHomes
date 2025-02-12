@@ -1,14 +1,14 @@
-package cloud.cloudie.cloudsystem.Classes;
+package cloud.cloudie.cloudsystem.classes;
 
-import cloud.cloudie.cloudsystem.Enums.TpaType;
+import cloud.cloudie.cloudsystem.enums.TpaType;
 
 import java.util.UUID;
 
 public class TpaRequest {
 
-    UUID requester;
-    UUID target;
-    TpaType type;
+    final UUID requester;
+    final UUID target;
+    final TpaType type;
 
     //<editor-fold desc="Constructors">
     /**

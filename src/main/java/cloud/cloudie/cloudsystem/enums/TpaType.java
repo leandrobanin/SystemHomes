@@ -1,4 +1,4 @@
-package cloud.cloudie.cloudsystem.Enums;
+package cloud.cloudie.cloudsystem.enums;
 
 public enum TpaType {
     TPA_THERE,
