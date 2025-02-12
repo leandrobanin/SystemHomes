@@ -1,6 +1,6 @@
-package moe.sebiann.system.Classes;
+package cloud.cloudie.cloudsystem.Classes;
 
-import moe.sebiann.system.SystemHomes;
+import cloud.cloudie.cloudsystem.SystemHomes;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 public class Home extends Location implements Serializable {
 
     String name;
@@ -174,8 +175,7 @@ public class Home extends Location implements Serializable {
                     SystemHomes.plugin.getLogger().info("Created homes.yml file.");
                 }
             } catch (IOException e) {
-                SystemHomes.plugin.getLogger().severe("Could not create homes.yml file!");
-                e.printStackTrace();
+                SystemHomes.plugin.getLogger().severe("Could not create homes.yml file!" + e.getMessage());
             }
         }
 
@@ -238,6 +238,7 @@ public class Home extends Location implements Serializable {
      * @param pathPrefix the prefix of what to search
      * @return Home object
      */
+    @SuppressWarnings("ConstantConditions")
     private static Home getHomeFromConfig(FileConfiguration config, String pathPrefix){
         String[] pathSegments = pathPrefix.split("\\.");
         String owningPlayer = pathSegments[pathSegments.length - 2];

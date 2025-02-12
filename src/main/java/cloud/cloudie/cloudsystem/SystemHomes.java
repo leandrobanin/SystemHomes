@@ -1,8 +1,14 @@
-package moe.sebiann.system;
+package cloud.cloudie.cloudsystem;
 
+import cloud.cloudie.cloudsystem.commands.SystemHomesCommand;
+import cloud.cloudie.cloudsystem.commands.HomeCommands;
+import cloud.cloudie.cloudsystem.commands.PlayerWarpCommands;
+import cloud.cloudie.cloudsystem.commands.SpawnCommand;
+import cloud.cloudie.cloudsystem.commands.TpaCommands;
+import cloud.cloudie.cloudsystem.commands.WarpCommands;
+import cloud.cloudie.cloudsystem.utils.UpdateChecker;
 import co.aikar.commands.PaperCommandManager;
 import com.google.common.collect.ImmutableList;
-import moe.sebiann.system.commands.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
@@ -17,15 +23,23 @@ public class SystemHomes extends JavaPlugin {
         if(plugin == null){
             plugin = this;
         }
-        // Save and load the configuration
+        manager = new PaperCommandManager(this);
         saveDefaultConfig();
+
+        getLogger().info("|---[ SystemHomes ]---------------------------------------|");
+        getLogger().info("|                                                         |");
 
         registerCommands();
         commandCompletions();
+
+        getLogger().info("|                                                         |");
+        getLogger().info("|------------------------------[ ENABLED SUCCESSFULLY ]---|");
+
+        new UpdateChecker(this).checkForUpdates();
     }
 
     void registerCommands(){
-        manager = new PaperCommandManager(this);
+
         manager.registerCommand(new SystemHomesCommand());
 
         manager.registerCommand(new HomeCommands());
@@ -33,6 +47,8 @@ public class SystemHomes extends JavaPlugin {
         manager.registerCommand(new SpawnCommand());
         manager.registerCommand(new TpaCommands());
         manager.registerCommand(new PlayerWarpCommands());
+
+        getLogger().info("|   Enabled commands                                      |");
     }
 
     void commandCompletions(){
@@ -52,6 +68,15 @@ public class SystemHomes extends JavaPlugin {
             List<String> warpNames = PlayerWarpCommands.pwarpNameToString();
             return ImmutableList.copyOf(warpNames);
         });
+
+        getLogger().info("|   Enabled command completions                           |");
     }
 
+    @Override
+    public void onDisable() {
+        getLogger().info("|---[ SystemHomes ]---------------------------------------|");
+        getLogger().info("|                                                         |");
+        getLogger().info("|                                                         |");
+        getLogger().info("|-----------------------------[ DISABLED SUCCESSFULLY ]---|");
+    }
 }

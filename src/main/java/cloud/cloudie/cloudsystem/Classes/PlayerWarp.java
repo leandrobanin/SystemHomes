@@ -1,6 +1,6 @@
-package moe.sebiann.system.Classes;
+package cloud.cloudie.cloudsystem.Classes;
 
-import moe.sebiann.system.SystemHomes;
+import cloud.cloudie.cloudsystem.SystemHomes;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 public class PlayerWarp extends Warp{
 
     UUID owningPlayer;
@@ -58,8 +59,7 @@ public class PlayerWarp extends Warp{
                     SystemHomes.plugin.getLogger().info("Created playerwarps.yml file.");
                 }
             } catch (IOException e) {
-                SystemHomes.plugin.getLogger().severe("Could not create playerwarps.yml file!");
-                e.printStackTrace();
+                SystemHomes.plugin.getLogger().severe("Could not create playerwarps.yml file!" + e.getMessage());
             }
         }
 
@@ -122,6 +122,7 @@ public class PlayerWarp extends Warp{
      * @param pathPrefix the prefix of what to search
      * @return Home object
      */
+    @SuppressWarnings("ConstantConditions")
     private static PlayerWarp getPlayerWarpFromConfig(FileConfiguration config, String pathPrefix){
         String[] pathSegments = pathPrefix.split("\\.");
         String name = pathSegments[pathSegments.length - 1];

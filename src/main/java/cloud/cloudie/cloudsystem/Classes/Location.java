@@ -1,4 +1,4 @@
-package moe.sebiann.system.Classes;
+package cloud.cloudie.cloudsystem.Classes;
 
 import org.bukkit.Bukkit;
 

@@ -1,6 +1,6 @@
-package moe.sebiann.system.Classes;
+package cloud.cloudie.cloudsystem.Classes;
 
-import moe.sebiann.system.Enums.TpaType;
+import cloud.cloudie.cloudsystem.Enums.TpaType;
 
 import java.util.UUID;
 

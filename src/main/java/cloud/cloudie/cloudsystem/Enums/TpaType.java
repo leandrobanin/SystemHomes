@@ -1,4 +1,4 @@
-package moe.sebiann.system.Enums;
+package cloud.cloudie.cloudsystem.Enums;
 
 public enum TpaType {
     TPA_THERE,

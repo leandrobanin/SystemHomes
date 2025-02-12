@@ -1,6 +1,6 @@
-package moe.sebiann.system.Classes;
+package cloud.cloudie.cloudsystem.Classes;
 
-import moe.sebiann.system.SystemHomes;
+import cloud.cloudie.cloudsystem.SystemHomes;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -80,6 +80,7 @@ public class Warp extends Location{
      * Sets the warp name
      * @param warpName New name for this warp
      */
+    @SuppressWarnings("unused")
     public void setWarpName(String warpName) {
         this.warpName = warpName;
     }
@@ -103,8 +104,7 @@ public class Warp extends Location{
                     SystemHomes.plugin.getLogger().info("Created warps.yml file.");
                 }
             } catch (IOException e) {
-                SystemHomes.plugin.getLogger().severe("Could not create warps.yml file!");
-                e.printStackTrace();
+                SystemHomes.plugin.getLogger().severe("Could not create warps.yml file!" + e.getMessage());
             }
         }
 
@@ -123,6 +123,7 @@ public class Warp extends Location{
     /**
      * @return the YAML string from this class
      */
+    @SuppressWarnings("unused")
     public String toYamlString(){
         return toYamlConfiguration().toString();
     }
@@ -166,6 +167,7 @@ public class Warp extends Location{
      * @param pathPrefix the prefix of what to search
      * @return Home object
      */
+    @SuppressWarnings("ConstantConditions")
     private static Warp getWarpFromConfig(FileConfiguration config, String pathPrefix){
         String[] pathSegments = pathPrefix.split("\\.");
         String name = pathSegments[pathSegments.length - 1];
@@ -186,6 +188,7 @@ public class Warp extends Location{
      * @param yamlString the YAML string of the object
      * @return Home object
      */
+    @SuppressWarnings("unused")
     public static Warp fromYamlString(String yamlString) {
         FileConfiguration config = YamlConfiguration.loadConfiguration(new StringReader(yamlString));
         String pathPrefix = "warps.";

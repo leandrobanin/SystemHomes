@@ -1,12 +1,12 @@
-package moe.sebiann.system.commands;
+package cloud.cloudie.cloudsystem.commands;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
-import moe.sebiann.system.Classes.Location;
-import moe.sebiann.system.Classes.Warp;
-import moe.sebiann.system.SystemHomes;
+import cloud.cloudie.cloudsystem.Classes.Location;
+import cloud.cloudie.cloudsystem.Classes.PlayerWarp;
+import cloud.cloudie.cloudsystem.SystemHomes;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -18,76 +18,92 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-@CommandPermission("systemhomes.player.warp")
-public class WarpCommands extends BaseCommand {
+@CommandPermission("systemhomes.player.pwarp")
+public class PlayerWarpCommands extends BaseCommand {
 
     List<String> pendingOverwrittenConfirmations = new ArrayList<>();
 
-    @CommandAlias("setwarp")
+    @CommandAlias("setplayerwarp|setpwarp")
     @CommandCompletion("@nothing")
-    @CommandPermission("systemhomes.admin.warp")
-    public void setWarp(CommandSender sender, String[] args) {
+    public void setPlayerWarp(CommandSender sender, String[] args) {
         if(!(sender instanceof Player player)) {
             sender.sendMessage(Component.text("Only a player can run this command.").color(TextColor.fromHexString("#FF5555")));
             return;
         }
-
         if(args.length < 1){
-            player.sendMessage(Component.text("Please give a name to this warp.").color(TextColor.fromHexString("#FF5555")));
+            player.sendMessage(Component.text("Please give a name to this PlayerWarp.").color(TextColor.fromHexString("#FF5555")));
             return;
         }
 
         String warpName = args[0].toLowerCase();
         String warpPath = "warps." + warpName;
-        Warp warp = new Warp(
+        PlayerWarp warp = new PlayerWarp(
                 warpName,
+                player.getUniqueId(),
                 new Location(player.getLocation())
         );
 
-        if(Warp.containsWarp(warpPath)) {
-            if(pendingOverwrittenConfirmations.contains(warpName)) {
+        if(PlayerWarp.containsPlayerWarp(warpPath)) {
 
+            PlayerWarp pwarp = PlayerWarp.getPlayerWarp(warpName);
+            if(!pwarp.getOwningPlayer().equals(player.getUniqueId()) || !player.hasPermission("systemhomes.admin.pwarp")) {
+                player.sendMessage(Component.text("You may not modify someone else's PlayerWarp!").color(TextColor.fromHexString("#FF5555")));
+                return;
+            }
+
+            if(pendingOverwrittenConfirmations.contains(warpName)) {
                 try{
-                    warp.uploadWarp();
+                    warp.uploadPlayerWarp();
                     pendingOverwrittenConfirmations.remove(warpName);
                 }catch(Exception e) {
-                    player.sendMessage(Component.text("Failed to upload Warp, please try again later.").color(TextColor.fromHexString("#FF5555")));
+                    player.sendMessage(Component.text("Failed to upload PlayerWarp, please try again later.").color(TextColor.fromHexString("#FF5555")));
                     return;
                 }
 
-                player.sendMessage(Component.text("Warp ").color(TextColor.fromHexString("#55FF55"))
+                player.sendMessage(Component.text("PlayerWarp ").color(TextColor.fromHexString("#55FF55"))
                         .append(Component.text(warp.getWarpName()).color(TextColor.fromHexString("#00AA00")))
                         .append(Component.text(" has been overridden!").color(TextColor.fromHexString("#55FF55"))));
                 return;
             }
 
             pendingOverwrittenConfirmations.add(warpName);
-            player.sendMessage(Component.text("Warp ").color(TextColor.fromHexString("#FF5555"))
+            player.sendMessage(Component.text("PlayerWarp ").color(TextColor.fromHexString("#FF5555"))
                     .append(Component.text(warp.getWarpName()).color(TextColor.fromHexString("#AA0000")))
                     .append(Component.text(" already exists! Use: ").color(TextColor.fromHexString("#FF5555")))
-                    .append(Component.text("/setwarp " + warp.getWarpName()).color(TextColor.fromHexString("#AA0000"))
+                    .append(Component.text("/setpwarp " + warp.getWarpName()).color(TextColor.fromHexString("#AA0000"))
                             .hoverEvent(HoverEvent.showText(Component.text("Click this to override this warp!").color(TextColor.fromHexString("#FF5555"))))
-                            .clickEvent(ClickEvent.runCommand("/setwarp " + warp.getWarpName())))
+                            .clickEvent(ClickEvent.runCommand("/setpwarp " + warp.getWarpName())))
                     .append(Component.text(" again to override it!").color(TextColor.fromHexString("#FF5555"))));
             return;
         }
 
+        int warpsMade = 0;
+        int maxWarps = SystemHomes.plugin.getConfig().getInt("pwarp.max_warps", 3);
+        for(PlayerWarp w : PlayerWarp.getPlayerWarps()){
+            if(w.getOwningPlayer().equals(player.getUniqueId())){
+                warpsMade++;
+                if(warpsMade >= maxWarps){
+                    player.sendMessage(Component.text("You already have the maximum amount of player warps set.").color(TextColor.fromHexString("#FF5555")));
+                    return;
+                }
+            }
+        }
+
         try{
-            warp.uploadWarp();
+            warp.uploadPlayerWarp();
         }catch(Exception e) {
-            player.sendMessage(Component.text("Failed to upload Warp, please try again later.").color(TextColor.fromHexString("#FF5555")));
+            player.sendMessage(Component.text("Failed to upload PlayerWarp, please try again later.").color(TextColor.fromHexString("#FF5555")));
             return;
         }
 
-        player.sendMessage(Component.text("Warp ").color(TextColor.fromHexString("#55FF55"))
+        player.sendMessage(Component.text("PlayerWarp ").color(TextColor.fromHexString("#55FF55"))
                 .append(Component.text(warp.getWarpName()).color(TextColor.fromHexString("#00AA00")))
                 .append(Component.text(" has been set to this location!").color(TextColor.fromHexString("#55FF55"))));
     }
 
-    @CommandAlias("delwarp")
-    @CommandCompletion("@warpNames")
-    @CommandPermission("systemhomes.admin.warp")
-    public void delWarp(CommandSender sender, String[] args) {
+    @CommandAlias("delplayerwarp|delpwarp|remplayerwarp|rempwarp")
+    @CommandCompletion("@pwarpNames")
+    public void delPlayerWarp(CommandSender sender, String[] args){
         if(!(sender instanceof Player player)) {
             sender.sendMessage(Component.text("Only a player can run this command.").color(TextColor.fromHexString("#FF5555")));
             return;
@@ -98,28 +114,35 @@ public class WarpCommands extends BaseCommand {
         }
 
         String warpName = args[0].toLowerCase();
-        Warp warp;
+        PlayerWarp warp;
         try{
-            warp = Warp.getWarp(warpName);
+            warp = PlayerWarp.getPlayerWarp(warpName);
         } catch (RuntimeException e) {
             player.sendMessage(Component.text("This warp does not exist.").color(TextColor.fromHexString("#FF5555")));
             return;
         }
+
+        if(!warp.getOwningPlayer().equals(player.getUniqueId()) && !player.hasPermission("systemhomes.admin.pwarp")){
+            player.sendMessage(Component.text("You can not delete this PlayerWarp as it does not belong to you!").color(TextColor.fromHexString("#FF5555")));
+            return;
+        }
+
         try{
-            warp.deleteWarp();
+            warp.deletePlayerWarp();
         }catch (RuntimeException e) {
             player.sendMessage(Component.text("This warp could not be deleted, please try again later.").color(TextColor.fromHexString("#FF5555")));
             return;
         }
 
-        player.sendMessage(Component.text("Warp ").color(TextColor.fromHexString("#FF5555"))
+        player.sendMessage(Component.text("PlayerWarp ").color(TextColor.fromHexString("#FF5555"))
                 .append(Component.text(warpName).color(TextColor.fromHexString("#AA0000")))
                 .append(Component.text(" has been deleted!").color(TextColor.fromHexString("#FF5555"))));
+
     }
 
-    @CommandAlias("warp")
-    @CommandCompletion("@warpNames")
-    public void warp(CommandSender sender, String[] args) {
+    @CommandAlias("playerwarp|pwarp")
+    @CommandCompletion("@pwarpNames")
+    public void playerWarp(CommandSender sender, String[] args){
         if (!(sender instanceof Player player)) {
             sender.sendMessage(Component.text("Only a player can run this command.").color(TextColor.fromHexString("#FF5555")));
             return;
@@ -129,11 +152,11 @@ public class WarpCommands extends BaseCommand {
             return;
         }
 
-        int delayInSeconds = SystemHomes.plugin.getConfig().getInt("warp.teleport_delay", 2);
+        int delayInSeconds = SystemHomes.plugin.getConfig().getInt("pwarp.teleport_delay", 2);
 
-        Warp warp;
+        PlayerWarp warp;
         try{
-            warp = Warp.getWarp(args[0].toLowerCase());
+            warp = PlayerWarp.getPlayerWarp(args[0].toLowerCase());
         }catch (RuntimeException e){
             player.sendMessage(Component.text("This warp does not exist.").color(TextColor.fromHexString("#FF5555")));
             return;
@@ -141,32 +164,32 @@ public class WarpCommands extends BaseCommand {
 
         org.bukkit.Location location = warp.getLocation().toBukkitLocation();
 
-        player.sendMessage(Component.text("Teleporting you to warp: ").color(TextColor.fromHexString("#55FF55"))
+        player.sendMessage(Component.text("Teleporting you to PlayerWarp: ").color(TextColor.fromHexString("#55FF55"))
                 .append(Component.text(warp.getWarpName()).color(TextColor.fromHexString("#00AA00")))
                 .append(Component.text(" in " + delayInSeconds + " seconds.").color(TextColor.fromHexString("#55FF55"))));
 
         Bukkit.getScheduler().runTaskLater(SystemHomes.plugin, () -> {
             player.teleport(location);
-            player.sendMessage(Component.text("Teleported you to your warp: ").color(TextColor.fromHexString("#55FF55"))
+            player.sendMessage(Component.text("Teleported you to PlayerWarp: ").color(TextColor.fromHexString("#55FF55"))
                     .append(Component.text(warp.getWarpName()).color(TextColor.fromHexString("#00AA00"))));
         }, delayInSeconds * 20L);
+
     }
 
-    @CommandAlias("warps")
-    @CommandCompletion("@nothing")
-    public void warpList(CommandSender sender) {
+    @CommandAlias("playerwarps|pwarps")
+    public void getPlayerWarps(CommandSender sender){
         if (!(sender instanceof Player player)) {
             sender.sendMessage(Component.text("Only a player can run this command.").color(TextColor.fromHexString("#FF5555")));
             return;
         }
 
-        List<Warp> warps = Warp.getWarps();
+        List<PlayerWarp> warps = PlayerWarp.getPlayerWarps();
 
-        Component component = Component.text("The servers warps (" + warps.size() + "):\n").color(TextColor.fromHexString("#FFAA00"));
-        for (Warp warp : warps) {
+        Component component = Component.text("The servers PlayerWarps (" + warps.size() + "):\n").color(TextColor.fromHexString("#FFAA00"));
+        for (PlayerWarp warp : warps) {
             component = component.append(Component.text(warp.getWarpName()).color(TextColor.fromHexString("#FFAA00"))
-                    .clickEvent(ClickEvent.runCommand("/warp " + warp.getWarpName()))
-                    .hoverEvent(HoverEvent.showText(Component.text("Teleport to warp: " + warp.getWarpName()).color(TextColor.fromHexString("#FFAA00")))));
+                    .clickEvent(ClickEvent.runCommand("/pwarp " + warp.getWarpName()))
+                    .hoverEvent(HoverEvent.showText(Component.text("Teleport to PlayerWarp: " + warp.getWarpName()).color(TextColor.fromHexString("#FFAA00")))));
             component = component.append(Component.text(" - ").color(TextColor.fromHexString("#AAAAAA")));
 
             String worldName = switch (warp.world) {
@@ -176,19 +199,20 @@ public class WarpCommands extends BaseCommand {
                 default -> warp.world;
             };
 
-            component = component.append(Component.text("(" + worldName + "; " + (int) warp.x + ", " + (int) warp.y + ", " + (int) warp.z + ")\n").color(TextColor.fromHexString("#55FFFF"))
-                    .clickEvent(ClickEvent.runCommand("/warp " + warp.getWarpName()))
-                    .hoverEvent(HoverEvent.showText(Component.text("Teleport to warp: " + warp.getWarpName()).color(TextColor.fromHexString("#FFAA00")))));
+            component = component.append(Component.text("(" + Bukkit.getOfflinePlayer(warp.getOwningPlayer()).getName() + "; " + worldName + "; " + (int) warp.x + ", " + (int) warp.y + ", " + (int) warp.z + ")\n").color(TextColor.fromHexString("#55FFFF"))
+                    .clickEvent(ClickEvent.runCommand("/pwarp " + warp.getWarpName()))
+                    .hoverEvent(HoverEvent.showText(Component.text("Teleport to PlayerWarp: " + warp.getWarpName()).color(TextColor.fromHexString("#FFAA00")))));
         }
 
         player.sendMessage(component);
+
     }
 
-    public static List<String> warpNameToString(){
+    public static List<String> pwarpNameToString(){
         List<String> warpNameList = new ArrayList<>();
-        List<Warp> warps = Warp.getWarps();
+        List<PlayerWarp> warps = PlayerWarp.getPlayerWarps();
 
-        for(Warp w : warps){
+        for(PlayerWarp w : warps){
             warpNameList.add(w.getWarpName());
         }
         return warpNameList;

@@ -1,9 +1,9 @@
 name: SystemHomes
 version: ${version}
-main: moe.sebiann.system.SystemHomes
+main: cloud.cloudie.cloudsystem.SystemHomes
 api-version: '1.21.4'
 authors: [ Sebiann, Beauver ]
-website: sebiann.moe
+website: https://cloudiesmp.github.io/
 prefix: SystemHomes
 permissions:
   systemhomes.admin.*:

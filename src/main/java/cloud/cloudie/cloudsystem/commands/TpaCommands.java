@@ -1,12 +1,12 @@
-package moe.sebiann.system.commands;
+package cloud.cloudie.cloudsystem.commands;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
-import moe.sebiann.system.Classes.TpaRequest;
-import moe.sebiann.system.Enums.TpaType;
-import moe.sebiann.system.SystemHomes;
+import cloud.cloudie.cloudsystem.Classes.TpaRequest;
+import cloud.cloudie.cloudsystem.Enums.TpaType;
+import cloud.cloudie.cloudsystem.SystemHomes;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -162,9 +162,7 @@ public class TpaCommands extends BaseCommand {
                     .append(Component.text(tpTime).color(TextColor.fromHexString("#00AA00")))
                     .append(Component.text(" seconds.").color(TextColor.fromHexString("#55FF55"))));
 
-            Bukkit.getScheduler().runTaskLater(SystemHomes.plugin, () -> {
-                player.teleport(target);
-            }, tpTime * 20L);
+            Bukkit.getScheduler().runTaskLater(SystemHomes.plugin, () -> player.teleport(target), tpTime * 20L);
 
         } else if (tpaRequest.getType() == TpaType.TPA_THERE) {
             target.sendMessage(Component.text("TPA request to ").color(TextColor.fromHexString("#55FF55"))
@@ -179,9 +177,7 @@ public class TpaCommands extends BaseCommand {
                     .append(Component.text(tpTime).color(TextColor.fromHexString("#00AA00")))
                     .append(Component.text(" seconds.").color(TextColor.fromHexString("#55FF55"))));
 
-            Bukkit.getScheduler().runTaskLater(SystemHomes.plugin, () -> {
-                target.teleport(player);
-            }, tpTime * 20L);
+            Bukkit.getScheduler().runTaskLater(SystemHomes.plugin, () -> target.teleport(player), tpTime * 20L);
         }
     }
 
