@@ -1,23 +1,34 @@
 name: SystemHomes
 version: ${version}
 main: cloud.cloudie.cloudsystem.SystemHomes
-api-version: '1.21.4'
-authors: [ Sebiann, Beauver ]
+api-version: '1.20'
+authors: [ Sebiann, Beauver, leehzado ]
 website: https://cloudiesmp.github.io/
 prefix: SystemHomes
+
+# Bloco de comandos que registra tudo no servidor
+commands:
+  sethome:
+    description: Define uma residência na sua localização atual.
+    usage: "/sethome [nome]"
+    permission: systemhomes.player.home
+  delhome:
+    description: Deleta uma das suas residências.
+    usage: "/delhome <nome>"
+    permission: systemhomes.player.home
+  home:
+    description: Teleporta para uma das suas residências.
+    usage: "/home [nome]"
+    permission: systemhomes.player.home
+  homes:
+    description: Lista todas as suas residências.
+    usage: "/homes"
+    permission: systemhomes.player.home
+
 permissions:
-  systemhomes.admin.*:
-    description: "This is for admins only"
-    default: op
-    children:
-      systemhomes.admin.reload: true
-      systemhomes.admin.warp: true
-      systemhomes.admin.pwarp: true
-  systemhomes.player.*:
-    description: "This is for all players"
-    default: not op
-    children:
-      systemhomes.player.tpa: true
-      systemhomes.player.home: true
-      systemhomes.player.warp: true
-      systemhomes.player.pwarp: true
+  systemhomes.player.home:
+    description: Permissão base para todos os comandos de home.
+    default: true
+  systemhomes.home.max.*:
+    description: "Define um limite numérico de residências. Use como systemhomes.home.max.<numero>"
+    default: false
